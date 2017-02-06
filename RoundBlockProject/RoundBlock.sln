@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{C1759921-FE15-5270-0F83-5E8D2BC8A1BD}") = "RoundBlock", "Assembly-CSharp.csproj", "{CADAF307-4B0F-0FF9-4D98-BA3A6E590D4D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CADAF307-4B0F-0FF9-4D98-BA3A6E590D4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CADAF307-4B0F-0FF9-4D98-BA3A6E590D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CADAF307-4B0F-0FF9-4D98-BA3A6E590D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CADAF307-4B0F-0FF9-4D98-BA3A6E590D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
