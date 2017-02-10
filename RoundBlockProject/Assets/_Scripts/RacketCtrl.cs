@@ -29,7 +29,6 @@ public class RacketCtrl : MonoBehaviour {
 	// 移動可能範囲
 	float range_x;
 	float range_z;
-	float rangeRate_z;
 
 	// ステージサイズ : 移動可能範囲算出用
 	public GameObject _wallHorizontal;
@@ -37,6 +36,7 @@ public class RacketCtrl : MonoBehaviour {
 
 	public float STAGE_WIDTH = 10f;
 	public float STAGE_HEIGHT = 22f;
+	float height_width_rate;
 
 	// ラケットの幅 : localScale
 	float verticalRacketWidth;
@@ -59,6 +59,7 @@ public class RacketCtrl : MonoBehaviour {
 
 		STAGE_WIDTH = _wallHorizontal.transform.localScale.x;
 		STAGE_HEIGHT = _wallVertical.transform.localScale.x;
+		height_width_rate = STAGE_HEIGHT / STAGE_WIDTH;
 
 		horizontalRacketWidth = this.transform.localScale.x;
 		verticalRacketWidth = otherRackets[(int)OtherRacketPosition.RIGHT].transform.localScale.x;
@@ -66,7 +67,6 @@ public class RacketCtrl : MonoBehaviour {
 		// ステージ幅の半分 - ラケットサイズの半分　= 移動可能範囲の絶対値
 		range_x = STAGE_WIDTH * 0.5f - horizontalRacketWidth * 0.5f;
 		range_z = STAGE_HEIGHT * 0.5f - verticalRacketWidth * 0.5f;
-		rangeRate_z = range_z / range_x;
 
 		x_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.x - rig.transform.position.x;
 		z_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.z - rig.transform.position.z;
@@ -125,22 +125,16 @@ public class RacketCtrl : MonoBehaviour {
 	}
 
 	void MoveWithVelocity(Vector3 worldPos) {
-		Vector3 target = new Vector3(worldPos.x, 0, worldPos.z);
+		Vector3 target = new Vector3(worldPos.x, 0, 2f); // 決め打ちにしてみる
 		if (target.x <= -range_x) {
 			target.x = -range_x;
 		} else if (target.x >= range_x) {
 			target.x = range_x;
 		}
 
-		float lastSqrMgr = Mathf.Infinity;
 		Vector3 desiredVelocity = (target - transform.position).normalized * speed;
 
-		float sqrMag = 0f;
-		sqrMag = (target - transform.position).sqrMagnitude;
-		if (sqrMag > lastSqrMgr) {
-			desiredVelocity = Vector3.zero;
-		}
-		lastSqrMgr = sqrMag;
+		float sqrMag = (target - transform.position).sqrMagnitude;
 		this.GetComponent<Rigidbody>().velocity = desiredVelocity;
 
 		MoveOtherRackets(desiredVelocity);
@@ -148,9 +142,11 @@ public class RacketCtrl : MonoBehaviour {
 
 	void MoveOtherRackets(Vector3 pVelocity) {
 		for (int i = 0; i < otherRackets.Count; i++) {
-			Vector3 v = exchangeVector(pVelocity, (OtherRacketPosition)i);
-			if (isVelocity)
-			{
+			if (!otherRackets[i].gameObject.activeSelf) {
+				return;
+			}
+			Vector3 v = exchangeVector(pVelocity, (OtherRacketPosition)i, isVelocity);
+			if (isVelocity)	{
 				otherRackets[i].velocity = v;
 			} else {
 				otherRackets[i].transform.position = v;
@@ -158,7 +154,20 @@ public class RacketCtrl : MonoBehaviour {
 		}
 	}
 
-	Vector3 exchangeVector(Vector3 pVelocity, OtherRacketPosition pRacketPos) {
+	Vector3 exchangeVector(Vector3 pVelocity, OtherRacketPosition pRacketPos, bool pIsVelocity = true) {
+		Vector3 v = pVelocity;
+
+		if (pIsVelocity) {
+			v = exchangeVelocityVector(v, pRacketPos);
+		} else {
+			v = exchangeTransformVector(v, pRacketPos);
+		}
+
+		return v;
+	}
+
+	// Transform
+	Vector3 exchangeTransformVector(Vector3 pVelocity, OtherRacketPosition pRacketPos) {
 		Vector3 v = pVelocity;
 
 		// 左右反転
@@ -166,9 +175,7 @@ public class RacketCtrl : MonoBehaviour {
 		{
 			v.x = - v.x;
 			v.z += z_diff_vertical;
-		} 
-
-		else if (pRacketPos == OtherRacketPosition.LEFT) {
+		} else if (pRacketPos == OtherRacketPosition.LEFT) {
 			// XとZを交代
 			float tmp = - (v.x - x_diff_horizontal) * STAGE_HEIGHT / STAGE_WIDTH;
 			v.x = - x_diff_horizontal;
@@ -180,6 +187,24 @@ public class RacketCtrl : MonoBehaviour {
 			v.z = z_diff_horizontal + tmp + STAGE_HEIGHT / 2;
 		}
 
+		return v;
+	}
+
+	// Velocity
+	Vector3 exchangeVelocityVector(Vector3 pVelocity, OtherRacketPosition pRacketPos) {
+		Vector3 v = pVelocity;
+
+		if (pRacketPos == OtherRacketPosition.TOP) {
+			v.x = -v.x;
+		} else if (pRacketPos == OtherRacketPosition.LEFT) {
+			float tmp = -v.x * STAGE_HEIGHT / STAGE_WIDTH;
+			v.x = v.z;
+			v.z = tmp;
+		} else {
+			float tmp = v.x * STAGE_HEIGHT / STAGE_WIDTH;
+			v.x = v.z;
+			v.z = tmp;
+		}
 		return v;
 	}
 }
