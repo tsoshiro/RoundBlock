@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour {
-	public float speed = 20.0f;
-
 	public float VEC_X = 5f;
 	public float VEC_Z = 5f;
 
 	public float magnitude = 20f;
-	public float magnitude_max = 20f;
+
+	public float angleAdjustValue = 100f;
 
 	Rigidbody rigid;
 
@@ -27,12 +26,12 @@ public class Ball : MonoBehaviour {
 
 	void Shot() {
 		rigid.AddForce(
-			(transform.forward + transform.right) * speed,
+			(transform.forward + transform.right) * magnitude,
 			ForceMode.VelocityChange);
 	}
 
 	void FixedUpdate() {
-		checkVelocity();
+		//checkVelocity();
 	}
 
 	void setMagnitude(Vector3 v) {
@@ -60,5 +59,39 @@ public class Ball : MonoBehaviour {
 
 		// 平均化
 		setMagnitude(v);
+	}
+
+	void HitRacket(GameObject pGameObject) {
+		float distanceFromCenter = 0;
+		float velocityValue = 0;
+
+		Vector3 v;
+		float width = pGameObject.transform.localScale.x;
+
+		if (pGameObject.name == "Racket" || pGameObject.name == "Racket_Top")
+		{
+			// HORIZONTAL
+			distanceFromCenter = this.transform.position.x - pGameObject.transform.position.x;
+
+			velocityValue = distanceFromCenter * width;
+
+			v = new Vector3(velocityValue, rigid.velocity.y, rigid.velocity.z);
+		} else {
+			// VERTICAL
+			distanceFromCenter = this.transform.position.z - pGameObject.transform.position.z;
+
+			velocityValue = distanceFromCenter * width;
+
+			v = new Vector3(rigid.velocity.x, rigid.velocity.y, velocityValue);
+		}
+
+		// 平均化
+		setMagnitude(v);
+	}
+
+	void OnCollisionEnter(Collision pCollision) {
+		if (pCollision.gameObject.tag == "Racket") {
+			HitRacket(pCollision.gameObject);
+		}
 	}
 }

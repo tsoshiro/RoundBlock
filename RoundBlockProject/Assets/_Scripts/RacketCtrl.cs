@@ -64,9 +64,9 @@ public class RacketCtrl : MonoBehaviour {
 		horizontalRacketWidth = this.transform.localScale.x;
 		verticalRacketWidth = otherRackets[(int)OtherRacketPosition.RIGHT].transform.localScale.x;
 
-		// ステージ幅の半分 - ラケットサイズの半分　= 移動可能範囲の絶対値
-		range_x = STAGE_WIDTH * 0.5f - horizontalRacketWidth * 0.5f;
-		range_z = STAGE_HEIGHT * 0.5f - verticalRacketWidth * 0.5f;
+		// ステージ幅の半分　= 移動可能範囲の絶対値
+		range_x = STAGE_WIDTH * 0.5f;
+		range_z = STAGE_HEIGHT * 0.5f;
 
 		x_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.x - rig.transform.position.x;
 		z_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.z - rig.transform.position.z;
