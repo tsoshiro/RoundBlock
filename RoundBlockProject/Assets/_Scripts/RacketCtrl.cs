@@ -16,8 +16,6 @@ public class RacketCtrl : MonoBehaviour {
 	Rigidbody rig;
 
 	#region INPUT
-	public GameObject _touchPositionMarker;
-	public float Z_OFFSET = 7.5f;
 	public bool isVelocity = false;
 
 	Vector3 inputVector;
@@ -51,6 +49,8 @@ public class RacketCtrl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		_inputManager = GameObject.Find("GameCtrl").GetComponent<InputManager>();
+
 		Init();
 	}
 
@@ -64,7 +64,10 @@ public class RacketCtrl : MonoBehaviour {
 		horizontalRacketWidth = this.transform.localScale.x;
 		verticalRacketWidth = otherRackets[(int)OtherRacketPosition.RIGHT].transform.localScale.x;
 
-		// ステージ幅の半分　= 移動可能範囲の絶対値
+		// ステージ幅の半分 - ラケットの半分 = 移動可能範囲の絶対値
+		//range_x = STAGE_WIDTH * 0.5f - horizontalRacketWidth * 0.5f;
+		//range_z = STAGE_HEIGHT * 0.5f - verticalRacketWidth * 0.5f;
+
 		range_x = STAGE_WIDTH * 0.5f;
 		range_z = STAGE_HEIGHT * 0.5f;
 
@@ -92,12 +95,11 @@ public class RacketCtrl : MonoBehaviour {
 		rig.AddForce(inputVector, ForceMode.Impulse);
 	}
 
+
+	InputManager _inputManager;
 	void GetTouchPosition() {
-		if (Input.GetMouseButton(0)) {
-			Vector3 screenPos = Input.mousePosition;
-			screenPos.z = Z_OFFSET; // オブジェクトのy座標固定位置をここで指定
-			Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-			_touchPositionMarker.transform.position = worldPos;
+		if (_inputManager.getIsTouching()) {
+			Vector3 worldPos = _inputManager.getWorldPosition();
 
 			// MOVE VELOCITY
 			if (isVelocity)

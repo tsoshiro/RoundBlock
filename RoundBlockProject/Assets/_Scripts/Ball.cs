@@ -12,8 +12,15 @@ public class Ball : MonoBehaviour {
 
 	Rigidbody rigid;
 
+	Vector3 defaultPosition;
+	public List<GameObject> _walls;
+	List<Vector3> _wallPositions;
+
 	// Use this for initialization
 	void Start () {
+		defaultPosition = this.transform.position;
+		setWallPositions();
+
 		rigid = this.GetComponent<Rigidbody>();
 	}
 	
@@ -22,7 +29,76 @@ public class Ball : MonoBehaviour {
 		if (Input.GetKeyDown("space")) {
 			Shot();
 		}
+		resetPositionWhenOut();
 	}
+
+	#region OUT_JUDGE
+	void setWallPositions() {
+		_wallPositions = new List<Vector3>();
+		for (int i = 0; i < _walls.Count; i++) {
+			_wallPositions.Add(_walls[i].transform.position);
+		}
+	}
+
+	void resetPositionWhenOut() {
+		if (checkIsOut()) {
+			this.transform.position = defaultPosition;
+		}
+	}
+
+	bool checkIsOut() {
+		bool flg;
+		for (int i = 0; i < _wallPositions.Count; i++) {
+			flg = checkIsOver(i);
+			if (flg) {
+				return flg;
+			}
+		}
+		return false;
+	}
+
+	bool checkIsOver(int pWallPosition) {
+		if (pWallPosition == (int)Const.WallPosition.TOP) {
+			return checkIsUpThanZ(_wallPositions[pWallPosition].z);
+		} else if (pWallPosition == (int)Const.WallPosition.RIGHT) {
+			return checkIsRightThanX(_wallPositions[pWallPosition].x);
+		} else if (pWallPosition == (int)Const.WallPosition.BOTTOM) {
+			return checkIsDownThanZ(_wallPositions[pWallPosition].x);
+		} else if (pWallPosition == (int)Const.WallPosition.LEFT) {
+			return checkIsLeftThanX(_wallPositions[pWallPosition].x);
+		}
+		return false;
+	}
+
+	bool checkIsRightThanX(float pX) {
+		if (this.transform.position.x >= pX) {
+			return true;
+		}
+		return false;
+	}
+
+	bool checkIsLeftThanX(float pX) {
+		if (this.transform.position.x <= pX)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool checkIsUpThanZ(float pZ) {
+		if (this.transform.position.z >= pZ) {
+			return true;
+		}
+		return false;
+	}
+
+	bool checkIsDownThanZ(float pZ) {
+		if (this.transform.position.z <= pZ) {
+			return true;
+		}
+		return false;	
+	}
+	#endregion
 
 	void Shot() {
 		rigid.AddForce(
