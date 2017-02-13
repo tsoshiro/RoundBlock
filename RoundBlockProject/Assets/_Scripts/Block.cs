@@ -19,8 +19,8 @@ public class Block : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "Ball") {
-			this.transform.position = this.transform.position + Vector3.up * 100;
-			_blockManager.removeBlock();
+			//this.transform.position = this.transform.position + Vector3.up * 100;
+			_blockManager.removeBlock(this);
 		}
 	}
 

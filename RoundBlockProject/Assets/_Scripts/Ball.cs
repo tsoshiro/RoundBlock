@@ -7,17 +7,22 @@ public class Ball : MonoBehaviour {
 	public float VEC_Z = 5f;
 
 	public float magnitude = 20f;
-
 	public float angleAdjustValue = 100f;
 
 	Rigidbody rigid;
-
 	Vector3 defaultPosition;
+	InputManager _inputManager;
+
+	// リセット位置
 	public List<GameObject> _walls;
 	List<Vector3> _wallPositions;
+	public RacketCtrl _racketCtrl;
+	bool isMoving = false;
 
 	// Use this for initialization
 	void Start () {
+		_inputManager = GameObject.Find("GameCtrl").GetComponent<InputManager>();
+
 		defaultPosition = this.transform.position;
 		setWallPositions();
 
@@ -26,13 +31,35 @@ public class Ball : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown("space")) {
-			Shot();
+		if (isMoving) {
+			UpdateMoving();
+			return;
 		}
+		UpdateStaying();
+	}
+
+	void UpdateStaying() {
+		if (_inputManager.getIsTouching()) {
+			setStartPosition();
+			return;
+		}
+		if (_inputManager.getIsReleased()) {
+			Shot();
+			isMoving = true;
+		}
+	}
+
+	void UpdateMoving() {
 		resetPositionWhenOut();
 	}
 
 	#region OUT_JUDGE
+	void setStartPosition() {
+		Vector3 pos = defaultPosition;
+		pos.x = _racketCtrl.gameObject.transform.position.x;
+		this.transform.position = pos;
+	}
+
 	void setWallPositions() {
 		_wallPositions = new List<Vector3>();
 		for (int i = 0; i < _walls.Count; i++) {
@@ -42,7 +69,10 @@ public class Ball : MonoBehaviour {
 
 	void resetPositionWhenOut() {
 		if (checkIsOut()) {
-			this.transform.position = defaultPosition;
+			setStartPosition();
+			rigid.velocity = Vector3.zero;
+
+			isMoving = false;
 		}
 	}
 
@@ -101,9 +131,13 @@ public class Ball : MonoBehaviour {
 	#endregion
 
 	void Shot() {
-		rigid.AddForce(
-			(transform.forward + transform.right) * magnitude,
-			ForceMode.VelocityChange);
+		Vector3 v = transform.forward * 2 + transform.right;
+		setMagnitude(v);
+		return;
+
+		//rigid.AddForce(
+		//	(transform.forward + transform.right) * magnitude,
+		//	ForceMode.VelocityChange);
 	}
 
 	void FixedUpdate() {

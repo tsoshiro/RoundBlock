@@ -9,11 +9,30 @@ public class InputManager : MonoBehaviour {
 
 	public float Z_OFFSET;
 
-	Vector3 screenPosition;
-	Vector3 worldPosition;
+	// タッチ位置を返す
+	Vector3 screenPosition; // スクリーン座標
+	Vector3 worldPosition;	// ワールド座標
+
+	// タッチ情報を返す
 	bool isTouching;
+	bool isTapped;
+	bool isReleased;
 
 	void Update() {
+		setTouchDown();
+		setIsTouching();
+		setIsReleased();
+	}
+
+	void setTouchDown() {
+		if (Input.GetMouseButtonDown(0)) {
+			isTapped = true;
+			return;
+		}
+		isTapped = false;
+	}
+
+	void setIsTouching() {
 		if (Input.GetMouseButton(0)) {
 			isTouching = true;
 			screenPosition = Input.mousePosition;
@@ -26,6 +45,14 @@ public class InputManager : MonoBehaviour {
 		isTouching = false;
 	}
 
+	void setIsReleased() {
+		if (Input.GetMouseButtonUp(0)) {
+			isReleased = true;
+			return;
+		}
+		isReleased = false;
+	}
+
 	public Vector3 getScreenPosition() {
 		return screenPosition;
 	}
@@ -36,5 +63,13 @@ public class InputManager : MonoBehaviour {
 
 	public bool getIsTouching() {
 		return isTouching;
+	}
+
+	public bool getIsTapped() {
+		return isTapped;
+	}
+
+	public bool getIsReleased() {
+		return isReleased;
 	}
 }
