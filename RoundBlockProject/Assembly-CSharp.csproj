@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\_Scripts\Ball.cs" />
      <Compile Include="Assets\_Scripts\Block.cs" />
+     <Compile Include="Assets\_Scripts\BlockDestroyAnimationManager.cs" />
      <Compile Include="Assets\_Scripts\BlockManager.cs" />
      <Compile Include="Assets\_Scripts\Const.cs" />
      <Compile Include="Assets\_Scripts\InputManager.cs" />

@@ -27,4 +27,25 @@ public class Block : MonoBehaviour {
 	public void setDefaultPosition() {
 		this.transform.position = defaultPosition;
 	}
+
+	#region ANIMATION
+	void playAnimation(GameObject pFxObj)
+	{
+		Vector3 pos = this.transform.position;
+		pos.y -= 0.5f;
+		pFxObj.transform.position = pos;
+
+		// 演出再生
+		pFxObj.SetActive(true);
+	}
+
+	public IEnumerator animationCoroutine(GameObject pFxObj, int pCounter)
+	{
+		playAnimation(pFxObj);
+
+		yield return new WaitForSeconds(3f);
+
+		_blockManager.fxReset(pCounter);
+	}
+	#endregion
 }
