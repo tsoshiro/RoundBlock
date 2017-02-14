@@ -51,6 +51,7 @@
      <Compile Include="Assets\_Scripts\BlockDestroyAnimationManager.cs" />
      <Compile Include="Assets\_Scripts\BlockManager.cs" />
      <Compile Include="Assets\_Scripts\Const.cs" />
+     <Compile Include="Assets\_Scripts\DebugManager.cs" />
      <Compile Include="Assets\_Scripts\InputManager.cs" />
      <Compile Include="Assets\_Scripts\RacketCtrl.cs" />
      <Compile Include="Assets\_Scripts\TouchMarkerCtrl.cs" />

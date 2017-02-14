@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RacketCtrl : MonoBehaviour {
-	public float accel = 1000.0f;
-
 	// Top, Left, Rightのラケット 
 	public List<Rigidbody> otherRackets;
 
@@ -22,7 +20,7 @@ public class RacketCtrl : MonoBehaviour {
 	#endregion
 
 	#region MOVE LOGIC
-	public float speed = 20;
+	public float speed = 100;
 
 	// 移動可能範囲
 	float range_x;
@@ -78,17 +76,11 @@ public class RacketCtrl : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		GetInputVector();
-
 		GetTouchPosition();
 	}
 
 	void FixedUpdate() {
 		Move();
-	}
-
-	void GetInputVector() {
-		inputVector = transform.right * Input.GetAxisRaw("Horizontal") * accel;
 	}
 
 	void Move() {
@@ -209,4 +201,10 @@ public class RacketCtrl : MonoBehaviour {
 		}
 		return v;
 	}
+
+	#region DEBUG
+	public void setIsVelocity(bool pFlg) {
+		isVelocity = pFlg;
+	}
+	#endregion
 }
