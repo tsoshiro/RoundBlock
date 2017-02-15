@@ -204,4 +204,11 @@ public class Ball : MonoBehaviour {
 			HitRacket(pCollision.gameObject);
 		}
 	}
+
+	#region DEBUG MODE
+	public void addMagnitudeValue(float pFloat) {
+		magnitude += pFloat;
+	}
+
+	#endregion
 }

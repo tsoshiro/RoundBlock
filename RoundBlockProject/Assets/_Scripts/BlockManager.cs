@@ -34,7 +34,7 @@ public class BlockManager : MonoBehaviour {
 		edgeTop	   	= _racketCtrl.otherRackets[0].transform.position.z - MARGINE;
 		edgeLeft	= _racketCtrl.otherRackets[1].transform.position.x + MARGINE;
 		edgeRight 	= _racketCtrl.otherRackets[2].transform.position.x - MARGINE;
-		edgeBottom 	= _racketCtrl.gameObject.transform.position.x + MARGINE;
+		edgeBottom 	= _racketCtrl.gameObject.transform.position.z + MARGINE;
 	}
 
 	void setAnimation() {
@@ -75,4 +75,17 @@ public class BlockManager : MonoBehaviour {
 			_blockList[i].setDefaultPosition();
 		}
 	}
+
+	#region DEBUG
+	public void addMargineValue(float pFloat) {
+		float abs = Mathf.Abs(MARGINE);
+		abs += pFloat;
+		MARGINE = abs;
+		setEdges();
+	}
+
+	public float getMargineValue() {
+		return MARGINE;
+	}
+	#endregion
 }
