@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockManager : MonoBehaviour {
+	public GameManager _gameManager;
+
+
 	List<Block> _blockList;
 	int blockCount;
 	RacketCtrl _racketCtrl;
@@ -14,6 +17,8 @@ public class BlockManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		_gameManager = GameObject.Find("GameCtrl").GetComponent<GameManager>();
+
 		setEdges();
 
 		setAnimation();
@@ -53,6 +58,9 @@ public class BlockManager : MonoBehaviour {
 		int counter = _blockDestroyAnimationManager.getCounter();
 
 		StartCoroutine(pBlock.animationCoroutine(fxObj, counter));
+
+		_gameManager.removeBlock();
+
 
 		// RESPAWN
 		Vector3 v = new Vector3((float)Random.Range((int)edgeLeft, (int)edgeRight), 0, (float)Random.Range((int)edgeBottom, (int)edgeTop));

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour {
+	public GameManager _gameManager;
+
 	public float VEC_X = 5f;
 	public float VEC_Z = 5f;
 
@@ -21,7 +23,9 @@ public class Ball : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		_inputManager = GameObject.Find("GameCtrl").GetComponent<InputManager>();
+		GameObject _gameCtrl = GameObject.Find("GameCtrl");
+		_inputManager = _gameCtrl.GetComponent<InputManager>();
+		_gameManager = _gameCtrl.GetComponent<GameManager>();
 
 		defaultPosition = this.transform.position;
 		setWallPositions();
@@ -44,6 +48,18 @@ public class Ball : MonoBehaviour {
 			return;
 		}
 		if (_inputManager.getIsReleased()) {
+			if (_gameManager.state == GameManager.GameState.PAUSE) {
+				return;
+			}
+			if (_gameManager.state == GameManager.GameState.RESULT) {
+				_gameManager.resetGame();
+				return;
+			}
+			if (_gameManager.state == GameManager.GameState.READY) {
+				// ゲーム開始
+				_gameManager.startGame();
+			}
+
 			Shot();
 			isMoving = true;
 		}
@@ -69,11 +85,17 @@ public class Ball : MonoBehaviour {
 
 	void resetPositionWhenOut() {
 		if (checkIsOut()) {
-			setStartPosition();
-			rigid.velocity = Vector3.zero;
+			resetPosition();
 
-			isMoving = false;
+			_gameManager.dropBall();
 		}
+	}
+
+	public void resetPosition() {
+		setStartPosition();
+		rigid.velocity = Vector3.zero;
+
+		isMoving = false;
 	}
 
 	bool checkIsOut() {
@@ -133,6 +155,7 @@ public class Ball : MonoBehaviour {
 	void Shot() {
 		Vector3 v = transform.forward * 2 + transform.right;
 		setMagnitude(v);
+
 		return;
 
 		//rigid.AddForce(

@@ -28,6 +28,12 @@ public class DebugManager : MonoBehaviour {
 		bool pFlg = isDebugMode;
 		_debugModePanel.SetActive(!pFlg);
 		isDebugMode = !pFlg;
+
+		if (isDebugMode) {
+			this.GetComponent<GameManager>().pauseGame();
+		} else {
+			this.GetComponent<GameManager>().startGame();
+		}
 	}
 
 	bool pIsVelocityFlg = false;
