@@ -66,11 +66,36 @@ public class BlockManager : MonoBehaviour {
 		Vector3 v = new Vector3((float)Random.Range((int)edgeLeft, (int)edgeRight), 0, (float)Random.Range((int)edgeBottom, (int)edgeTop));
 		pBlock.transform.position = v;
 
+		addItem(pBlock);
+		
 		//blockCount--;
 		//if (blockCount == 0) {
 		//	reset();
 		//	blockCount = _blockList.Count;
 		//}
+	}
+
+	bool checkIsItem() {
+		int n = Random.Range(0, 100);
+		if (n <= 20)
+			return true;
+		return false;
+	}
+
+	void addItem(Block pBlock) {
+		if (!checkIsItem())
+		{ // Itemでない
+			if (pBlock.gameObject.GetComponent<Item>())
+			{ // Itemがすでに付いているなら削除
+				Destroy(pBlock.gameObject.GetComponent<Item>());
+			}
+		}
+		else {
+			pBlock.gameObject.AddComponent<Item>();		
+		}
+
+		pBlock.setItem();
+	
 	}
 
 	public void fxReset(int pCounter) {

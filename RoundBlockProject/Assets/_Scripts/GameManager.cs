@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 	public GameState state;
 	ScoreManager _scoreManager;
 	TimeManager _timeManager;
+	public BlockManager _blockManager;
+	public BallManager _ballManager;
 
 	int SCORE_PER_BLOCK = 100;
 	float ADD_TIME_PER_BLOCK = 1f;

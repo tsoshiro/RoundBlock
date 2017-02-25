@@ -15,11 +15,22 @@ public class Ball : MonoBehaviour {
 	Vector3 defaultPosition;
 	InputManager _inputManager;
 
+	public enum BallState {
+		DEFAULT,
+		HARD
+	}
+
+	public BallState myBallState;
+
+
 	// リセット位置
 	public List<GameObject> _walls;
 	List<Vector3> _wallPositions;
 	public RacketCtrl _racketCtrl;
 	bool isMoving = false;
+
+	// メイン OR サブ
+	bool isMain = true;
 
 	// Use this for initialization
 	void Start () {
@@ -27,19 +38,32 @@ public class Ball : MonoBehaviour {
 		_inputManager = _gameCtrl.GetComponent<InputManager>();
 		_gameManager = _gameCtrl.GetComponent<GameManager>();
 
+		myBallState = BallState.DEFAULT;
+
 		defaultPosition = this.transform.position;
 		setWallPositions();
 
 		rigid = this.GetComponent<Rigidbody>();
 	}
+
+	// 追加ボールの時、ドロップ時の戻り先をセットしておく
+	public void InitAddBall(GameObject pParent) {
+		defaultPosition = pParent.transform.position;
+		isMain = false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
+		// 共通
 		if (isMoving) {
 			UpdateMoving();
 			return;
 		}
-		UpdateStaying();
+
+		// メイン玉のみ操作が入る
+		if (isMain) {
+			UpdateStaying();
+		}
 	}
 
 	void UpdateStaying() {
@@ -85,8 +109,16 @@ public class Ball : MonoBehaviour {
 
 	void resetPositionWhenOut() {
 		if (checkIsOut()) {
-			resetPosition();
+			resetBall();
+		}
+	}
 
+	void resetBall() {
+		resetPosition();
+		setState((int)BallState.DEFAULT);
+
+		// Main時のみペナルティ
+		if (isMain) {
 			_gameManager.dropBall();
 		}
 	}
@@ -222,10 +254,28 @@ public class Ball : MonoBehaviour {
 		setMagnitude(v);
 	}
 
+	public void setState(int pInt) {
+		myBallState = (BallState)pInt;
+	}
+
 	void OnCollisionEnter(Collision pCollision) {
 		if (pCollision.gameObject.tag == "Racket") {
 			HitRacket(pCollision.gameObject);
 		}
+	}
+
+	#region MAIN/SUB SWITCHER
+	public void setIsMain(bool pFlg) {
+		isMain = pFlg;
+	}
+	#endregion
+
+	public bool getIsMoving() {
+		return isMoving;
+	}
+
+	public bool getIsMain() {
+		return isMain;
 	}
 
 	#region DEBUG MODE
