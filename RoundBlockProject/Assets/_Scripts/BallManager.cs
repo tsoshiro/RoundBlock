@@ -44,8 +44,8 @@ public class BallManager : MonoBehaviour {
 			return;	
 		}
 
-		// BallのVelocityを取得
-		Vector3 v = pBall.gameObject.GetComponent<Rigidbody>().velocity;
+		// BallのlastVelocityを取得
+		Vector3 v = pBall.getLastVelocity();
 		Vector3 position = pBall.transform.position;
 
 		// Blockならブロックの位置を代入

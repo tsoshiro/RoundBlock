@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\_Scripts\Ball.cs" />
+     <Compile Include="Assets\_Scripts\BallMain.cs" />
+     <Compile Include="Assets\_Scripts\BallManager.cs" />
      <Compile Include="Assets\_Scripts\Block.cs" />
      <Compile Include="Assets\_Scripts\BlockDestroyAnimationManager.cs" />
      <Compile Include="Assets\_Scripts\BlockManager.cs" />
@@ -55,6 +57,7 @@
      <Compile Include="Assets\_Scripts\GameCtrl.cs" />
      <Compile Include="Assets\_Scripts\GameManager.cs" />
      <Compile Include="Assets\_Scripts\InputManager.cs" />
+     <Compile Include="Assets\_Scripts\Item.cs" />
      <Compile Include="Assets\_Scripts\RacketCtrl.cs" />
      <Compile Include="Assets\_Scripts\ScoreManager.cs" />
      <Compile Include="Assets\_Scripts\TimeManager.cs" />

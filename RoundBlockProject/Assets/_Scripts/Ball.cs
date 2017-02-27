@@ -12,6 +12,7 @@ public class Ball : MonoBehaviour {
 	public float angleAdjustValue = 100f;
 
 	Rigidbody rigid;
+	Vector3 lastVelocity;
 	Vector3 defaultPosition;
 	InputManager _inputManager;
 
@@ -64,6 +65,9 @@ public class Ball : MonoBehaviour {
 		if (isMain) {
 			UpdateStaying();
 		}
+
+		// LastVelocityを更新
+		lastVelocity = rigid.velocity;
 	}
 
 	void UpdateStaying() {
@@ -276,6 +280,10 @@ public class Ball : MonoBehaviour {
 
 	public bool getIsMain() {
 		return isMain;
+	}
+
+	public Vector3 getLastVelocity() {
+		return lastVelocity;
 	}
 
 	#region DEBUG MODE
