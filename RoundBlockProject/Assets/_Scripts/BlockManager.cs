@@ -79,7 +79,8 @@ public class BlockManager : MonoBehaviour {
 		// 場に5個以上あるなら、アイテムを出さない。
 		int itemCounter = 0;
 		for (int i = 0; i < _blockList.Count; i++) {
-			itemCounter++;
+			if (_blockList[i].gameObject.GetComponent<Item>())
+				itemCounter++;
 			if (itemCounter >= ITEM_NUM)
 				return false;
 		}	     
