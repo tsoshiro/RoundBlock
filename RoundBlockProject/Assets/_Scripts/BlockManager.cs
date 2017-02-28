@@ -13,7 +13,7 @@ public class BlockManager : MonoBehaviour {
 
 	float edgeTop, edgeRight, edgeBottom, edgeLeft;
 	float MARGINE = 5f;
-
+	int ITEM_NUM = 5;
 
 	// Use this for initialization
 	void Start () {
@@ -76,6 +76,14 @@ public class BlockManager : MonoBehaviour {
 	}
 
 	bool checkIsItem() {
+		// 場に5個以上あるなら、アイテムを出さない。
+		int itemCounter = 0;
+		for (int i = 0; i < _blockList.Count; i++) {
+			itemCounter++;
+			if (itemCounter >= ITEM_NUM)
+				return false;
+		}	     
+
 		int n = Random.Range(0, 100);
 		if (n <= 20)
 			return true;

@@ -50,7 +50,7 @@ public class Ball : MonoBehaviour {
 	// 追加ボールの時、ドロップ時の戻り先をセットしておく
 	public void InitAddBall(GameObject pParent) {
 		defaultPosition = pParent.transform.position;
-		isMain = false;
+		setIsMain(false);
 	}
 	
 	// Update is called once per frame
@@ -271,6 +271,10 @@ public class Ball : MonoBehaviour {
 	#region MAIN/SUB SWITCHER
 	public void setIsMain(bool pFlg) {
 		isMain = pFlg;
+
+		// Color
+		Color color = (isMain) ? Color.yellow : Color.white;
+		this.GetComponent<MeshRenderer>().material.color = color;
 	}
 	#endregion
 
