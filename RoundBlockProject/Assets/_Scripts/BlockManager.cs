@@ -5,7 +5,6 @@ using UnityEngine;
 public class BlockManager : MonoBehaviour {
 	public GameManager _gameManager;
 
-
 	List<Block> _blockList;
 	int blockCount;
 	RacketCtrl _racketCtrl;
@@ -14,6 +13,10 @@ public class BlockManager : MonoBehaviour {
 	float edgeTop, edgeRight, edgeBottom, edgeLeft;
 	float MARGINE = 5f;
 	int ITEM_NUM = 5;
+
+	// HARD BALL MODE
+	float HARD_TIME = 10f;
+	float hardTimer = 0f;
 
 	// Use this for initialization
 	void Start () {
@@ -98,8 +101,7 @@ public class BlockManager : MonoBehaviour {
 			{ // Itemがすでに付いているなら削除
 				Destroy(pBlock.gameObject.GetComponent<Item>());
 			}
-		}
-		else {
+		} else {
 			pBlock.gameObject.AddComponent<Item>();		
 		}
 

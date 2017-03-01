@@ -63,4 +63,8 @@ public class BallManager : MonoBehaviour {
 			counter = 0;
 		}
 	}
+
+	void setHard() {
+		
+	}
 }

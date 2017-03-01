@@ -258,8 +258,22 @@ public class Ball : MonoBehaviour {
 		setMagnitude(v);
 	}
 
+	// Stateの設定
 	public void setState(int pInt) {
 		myBallState = (BallState)pInt;
+		Color color;
+
+		switch (myBallState) {
+			case BallState.DEFAULT:
+				color = Color.yellow;
+				break;
+			case BallState.HARD:
+				color = Color.blue;
+				break;
+			default:
+				color = Color.yellow;
+				break;
+		}
 	}
 
 	void OnCollisionEnter(Collision pCollision) {
@@ -274,7 +288,11 @@ public class Ball : MonoBehaviour {
 
 		// Color
 		Color color = (isMain) ? Color.yellow : Color.white;
-		this.GetComponent<MeshRenderer>().material.color = color;
+		setColor(color);
+	}
+
+	void setColor(Color pColor) {
+		this.GetComponent<MeshRenderer>().material.color = pColor;
 	}
 	#endregion
 
