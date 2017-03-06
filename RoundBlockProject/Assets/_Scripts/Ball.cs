@@ -50,24 +50,29 @@ public class Ball : MonoBehaviour {
 	// 追加ボールの時、ドロップ時の戻り先をセットしておく
 	public void InitAddBall(GameObject pParent) {
 		defaultPosition = pParent.transform.position;
+		Debug.Log(this.gameObject.name+"\ndefaultPosition:"+defaultPosition + " pParent.transform.position:"+pParent.transform.position);
 		setIsMain(false);
+		setIsMoving (true);
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		// 共通
-		if (isMoving) {
-			UpdateMoving();
-			return;
+		if (isMain) {
+			if (!isMoving) { // メイン玉のみ、動いていなければ操作が入る
+				UpdateStaying();
+				return;
+			}
 		}
 
-		// メイン玉のみ操作が入る
-		if (isMain) {
-			UpdateStaying();
+		if (isMoving) {
+			// Mainも非メインも
+			UpdateMoving ();
 		}
 
 		// LastVelocityを更新
 		lastVelocity = rigid.velocity;
+
 	}
 
 	void UpdateStaying() {
@@ -89,7 +94,7 @@ public class Ball : MonoBehaviour {
 			}
 
 			Shot();
-			isMoving = true;
+			setIsMoving (true);
 		}
 	}
 
@@ -100,8 +105,13 @@ public class Ball : MonoBehaviour {
 	#region OUT_JUDGE
 	void setStartPosition() {
 		Vector3 pos = defaultPosition;
-		pos.x = _racketCtrl.gameObject.transform.position.x;
+		if (isMain) {
+			pos.x = _racketCtrl.gameObject.transform.position.x;
+		}
 		this.transform.position = pos;
+		if (!isMain) {
+			this.gameObject.SetActive (false);
+		}
 	}
 
 	void setWallPositions() {
@@ -131,7 +141,7 @@ public class Ball : MonoBehaviour {
 		setStartPosition();
 		rigid.velocity = Vector3.zero;
 
-		isMoving = false;
+		setIsMoving (false);
 	}
 
 	bool checkIsOut() {
@@ -289,6 +299,10 @@ public class Ball : MonoBehaviour {
 		// Color
 		Color color = (isMain) ? Color.yellow : Color.white;
 		setColor(color);
+	}
+
+	public void setIsMoving(bool pFlg) {
+		isMoving = pFlg;
 	}
 
 	void setColor(Color pColor) {

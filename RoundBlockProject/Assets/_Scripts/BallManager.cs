@@ -20,6 +20,7 @@ public class BallManager : MonoBehaviour {
 			GameObject obj = (GameObject)Instantiate(_ballPrefab,
 			                                         _ballPrefab.transform.position,
 			                                         _ballPrefab.transform.rotation);
+			obj.name = _ballPrefab.name + "_" + i.ToString ("D2");
 			obj.transform.SetParent(this.transform);
 			obj.transform.localPosition = new Vector3(0, 0, 0);
 			_balls.Add(obj.GetComponent<Ball>());
@@ -38,10 +39,12 @@ public class BallManager : MonoBehaviour {
 	}
 
 	public void addBall(Ball pBall, Block pBlock = null) {
+		Debug.Log ("addBall called:" + pBall + " " + pBlock);
+
 		// 全て出払っている場合
 		if (!checkIsBallAvailable()) {
 			Debug.Log("NO BALL AVAILABLE");
-			return;	
+			return;
 		}
 
 		// BallのlastVelocityを取得
