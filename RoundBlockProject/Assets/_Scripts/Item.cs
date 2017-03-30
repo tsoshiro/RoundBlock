@@ -29,11 +29,13 @@ public class Item : MonoBehaviour {
 	// ボール情報を受け取る
 	public void hit(Ball pBall) {
 		// よしなに処理
+
 		switch (myType) {
 			case ItemType.ADD_BALL:
-				addBlock(pBall);
+				addBall(pBall);
 				break;
 			case ItemType.HARD:
+				setBallHard (pBall);
 				break;
 			case ItemType.WIDER_RACKET:
 				break;
@@ -44,11 +46,11 @@ public class Item : MonoBehaviour {
 		}
 	}
 
-	void setBallHard() {
-		//
+	void setBallHard(Ball pBall) {
+		pBall.setState ((int)Ball.BallState.HARD);
 	}
 
-	void addBlock(Ball pBall) {
+	void addBall(Ball pBall) {
 		_ballManager.addBall(pBall, this.gameObject.GetComponent<Block>());
 	}
 

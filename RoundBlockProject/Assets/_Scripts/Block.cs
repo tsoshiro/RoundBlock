@@ -6,6 +6,7 @@ public class Block : MonoBehaviour {
 	Vector3 defaultPosition;
 	BlockManager _blockManager;
 	Item _item;
+	bool isItem;
 
 	Color defColor;
 
@@ -13,18 +14,16 @@ public class Block : MonoBehaviour {
 	void Start () {
 		defaultPosition = transform.position;
 		_blockManager = transform.parent.GetComponent<BlockManager>();
+		_item = this.gameObject.AddComponent<Item> ();
 
 		defColor = this.GetComponent<MeshRenderer>().material.color;
 	}
 
-	public void setItem() {
-		if (this.GetComponent<Item>())
-		{
-			_item = this.GetComponent<Item>();
-			this.GetComponent<MeshRenderer>().material.color = Color.red;
-		}
-		else {
-			this.GetComponent<MeshRenderer>().material.color = defColor;
+	public void setBlockColor() {
+		if (isItem) {
+			this.GetComponent<MeshRenderer> ().material.color = Color.red;
+		} else {
+			this.GetComponent<MeshRenderer> ().material.color = defColor;
 		}
 	}
 
@@ -36,18 +35,17 @@ public class Block : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "Ball") {
-			//this.transform.position = this.transform.position + Vector3.up * 100;
-			if (checkIsBallHard(collision.gameObject.GetComponent<Ball>())) {
-				Debug.Log("IS HARD!");
-				removeColliderMaterial();
-			}
-
-			if (_item != null) { // itemならば
-				_item.hit(collision.gameObject.GetComponent<Ball>());
-			}
-
-			_blockManager.removeBlock(this);
+			Ball ball = collision.gameObject.GetComponent<Ball> ();
+			HitByBall (ball);
 		}
+	}
+
+	public void HitByBall(Ball pBall) {
+		if (isItem) { // itemならば
+			_item.hit (pBall);
+		}
+
+		_blockManager.removeBlock(this);
 	}
 
 	bool checkIsBallHard(Ball pBall) {
@@ -65,6 +63,13 @@ public class Block : MonoBehaviour {
 		this.transform.position = defaultPosition;
 	}
 
+	public void setIsItem(bool pFlg) {
+		isItem = pFlg;
+	}
+
+	public bool getIsItem() {
+		return isItem;
+	}
 
 
 	#region ANIMATION

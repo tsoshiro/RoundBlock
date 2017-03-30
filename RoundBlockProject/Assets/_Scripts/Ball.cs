@@ -22,7 +22,8 @@ public class Ball : MonoBehaviour {
 	}
 
 	public BallState myBallState;
-
+	public float MAX_HARD_TIME = 10f;
+	public float hardTime = 0f;
 
 	// リセット位置
 	public List<GameObject> _walls;
@@ -53,11 +54,15 @@ public class Ball : MonoBehaviour {
 		Debug.Log(this.gameObject.name+"\ndefaultPosition:"+defaultPosition + " pParent.transform.position:"+pParent.transform.position);
 		setIsMain(false);
 		setIsMoving (true);
-
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (myBallState == BallState.HARD) {
+			// count hard time
+			countHardTimer();
+		}
+
 		if (isMain) {
 			if (!isMoving) { // メイン玉のみ、動いていなければ操作が入る
 				UpdateStaying();
@@ -274,21 +279,34 @@ public class Ball : MonoBehaviour {
 		Color color;
 
 		switch (myBallState) {
-			case BallState.DEFAULT:
-				color = Color.yellow;
+		case BallState.DEFAULT:
+			color = Color.yellow;
+			gameObject.layer = LayerName.Ball;
 				break;
 			case BallState.HARD:
 				color = Color.blue;
+				hardTime = MAX_HARD_TIME;
+			gameObject.layer = LayerName.HardBall;
 				break;
 			default:
 				color = Color.yellow;
 				break;
 		}
+		setColor (color);
 	}
 
 	void OnCollisionEnter(Collision pCollision) {
 		if (pCollision.gameObject.tag == "Racket") {
 			HitRacket(pCollision.gameObject);
+		}
+	}
+
+	void OnTriggerEnter(Collision pCollision) {
+		// HARD以外ならTrigger無効
+		if (myBallState != BallState.HARD)
+			return;
+		if (pCollision.gameObject.tag == "Block") {
+			pCollision.gameObject.GetComponent<Block> ().HitByBall(this);
 		}
 	}
 
@@ -321,6 +339,15 @@ public class Ball : MonoBehaviour {
 	public Vector3 getLastVelocity() {
 		return lastVelocity;
 	}
+
+	#region HARD TYPE
+	void countHardTimer() {
+		hardTime -= Time.deltaTime;
+		if (hardTime <= 0) {
+			setState ((int)BallState.DEFAULT);
+		}
+	}
+	#endregion
 
 	#region DEBUG MODE
 	public void addMagnitudeValue(float pFloat) {

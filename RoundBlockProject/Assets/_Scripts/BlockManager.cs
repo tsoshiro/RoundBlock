@@ -82,12 +82,13 @@ public class BlockManager : MonoBehaviour {
 		// 場に5個以上あるなら、アイテムを出さない。
 		int itemCounter = 0;
 		for (int i = 0; i < _blockList.Count; i++) {
-			if (_blockList[i].gameObject.GetComponent<Item>())
+			if (_blockList[i].getIsItem())
 				itemCounter++;
 			if (itemCounter >= ITEM_NUM)
 				return false;
 		}	     
 
+		// 20%の確率でアイテムを出す
 		int n = Random.Range(0, 100);
 		if (n <= 20)
 			return true;
@@ -95,18 +96,15 @@ public class BlockManager : MonoBehaviour {
 	}
 
 	void addItem(Block pBlock) {
+		// Item出すかどうかを判断
 		if (!checkIsItem())
-		{ // Itemでない
-			if (pBlock.gameObject.GetComponent<Item>())
-			{ // Itemがすでに付いているなら削除
-				Destroy(pBlock.gameObject.GetComponent<Item>());
-			}
+		{ // Item出ない
+			pBlock.setIsItem(false);
 		} else {
-			pBlock.gameObject.AddComponent<Item>();		
+			pBlock.setIsItem(true);
 		}
 
-		pBlock.setItem();
-	
+		pBlock.setBlockColor ();
 	}
 
 	public void fxReset(int pCounter) {

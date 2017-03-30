@@ -28,8 +28,12 @@ public class BallManager : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// 追加用のボールがあるか確認する。
+	/// </summary>
+	/// <returns>追加用のボールがあれば<c>true</c>,なければ <c>false</c></returns>
 	bool checkIsBallAvailable() {
-		// 動いていないのがひとつでもあればtrue
+		// 動いていないボールがひとつでもあればtrue
 		for (int i = 0; i < n; i++) {
 			if (!_balls[i].getIsMoving()) {
 				return true;
@@ -37,6 +41,12 @@ public class BallManager : MonoBehaviour {
 		}
 		return false;
 	}
+
+	/// <summary>
+	/// ボールを追加する。
+	/// </summary>
+	/// <param name="pBall">ヒットしたボール</param>
+	/// <param name="pBlock">ヒットしたブロック</param>
 
 	public void addBall(Ball pBall, Block pBlock = null) {
 		Debug.Log ("addBall called:" + pBall + " " + pBlock);
@@ -65,6 +75,7 @@ public class BallManager : MonoBehaviour {
 		if (counter >= n) {
 			counter = 0;
 		}
+		Debug.Log ("counter:" + counter);
 	}
 
 	void setHard() {

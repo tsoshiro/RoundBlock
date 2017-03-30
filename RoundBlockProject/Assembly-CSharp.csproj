@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\LayerName.cs" />
      <Compile Include="Assets\_Scripts\Ball.cs" />
      <Compile Include="Assets\_Scripts\BallMain.cs" />
      <Compile Include="Assets\_Scripts\BallManager.cs" />
