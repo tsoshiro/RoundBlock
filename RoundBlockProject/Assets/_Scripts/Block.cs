@@ -6,7 +6,6 @@ public class Block : MonoBehaviour {
 	Vector3 defaultPosition;
 	BlockManager _blockManager;
 	Item _item;
-	bool isItem;
 
 	Color defColor;
 
@@ -19,12 +18,31 @@ public class Block : MonoBehaviour {
 		defColor = this.GetComponent<MeshRenderer>().material.color;
 	}
 
+	/// <summary>
+	/// ItemTypeの内容に応じて、ブロックの色を変更する
+	/// </summary>
 	public void setBlockColor() {
-		if (isItem) {
-			this.GetComponent<MeshRenderer> ().material.color = Color.red;
-		} else {
-			this.GetComponent<MeshRenderer> ().material.color = defColor;
+		Const.ItemType itemType = _item.getItemType ();
+		Color color = defColor;
+		switch (itemType) {
+		case Const.ItemType.ADD_BALL:
+			color = Color.red;
+			break;
+		case Const.ItemType.HARD:
+			color = Color.blue;
+			break;
+		case Const.ItemType.WIDER_RACKET:
+			break;
+		case Const.ItemType.SHOT:
+			break;
+		case Const.ItemType.SUPER_SHOT:
+			break;		
+		default:
+			color = defColor;
+			break;
 		}
+
+		this.GetComponent<MeshRenderer> ().material.color = color;
 	}
 
 
@@ -41,7 +59,7 @@ public class Block : MonoBehaviour {
 	}
 
 	public void HitByBall(Ball pBall) {
-		if (isItem) { // itemならば
+		if (_item.getItemType() != Const.ItemType.NONE) { // itemならば
 			_item.hit (pBall);
 		}
 
@@ -63,15 +81,14 @@ public class Block : MonoBehaviour {
 		this.transform.position = defaultPosition;
 	}
 
-	public void setIsItem(bool pFlg) {
-		isItem = pFlg;
+	public void setItemType(Const.ItemType pItemType) {
+		_item.setItemType (pItemType);
 	}
 
-	public bool getIsItem() {
-		return isItem;
+	public Const.ItemType getItemType() {
+		return _item.getItemType ();
 	}
-
-
+		
 	#region ANIMATION
 	void playAnimation(GameObject pFxObj)
 	{

@@ -9,4 +9,13 @@ public class Const {
 		BOTTOM,
 		LEFT
 	}
+
+	public enum ItemType {
+		NONE,
+		ADD_BALL,
+		HARD,
+		WIDER_RACKET,
+		SHOT,
+		SUPER_SHOT
+	}
 }

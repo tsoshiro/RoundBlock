@@ -24,6 +24,7 @@ public class Ball : MonoBehaviour {
 	public BallState myBallState;
 	public float MAX_HARD_TIME = 10f;
 	public float hardTime = 0f;
+	Collider _collider;
 
 	// リセット位置
 	public List<GameObject> _walls;
@@ -39,6 +40,7 @@ public class Ball : MonoBehaviour {
 		GameObject _gameCtrl = GameObject.Find("GameCtrl");
 		_inputManager = _gameCtrl.GetComponent<InputManager>();
 		_gameManager = _gameCtrl.GetComponent<GameManager>();
+		_collider = gameObject.GetComponent<Collider> ();
 
 		myBallState = BallState.DEFAULT;
 
@@ -60,6 +62,7 @@ public class Ball : MonoBehaviour {
 	void Update () {
 		if (myBallState == BallState.HARD) {
 			// count hard time
+			setTriggerWhenHard ();
 			countHardTimer();
 		}
 
@@ -280,17 +283,19 @@ public class Ball : MonoBehaviour {
 
 		switch (myBallState) {
 		case BallState.DEFAULT:
-			color = Color.yellow;
-			gameObject.layer = LayerName.Ball;
-				break;
-			case BallState.HARD:
-				color = Color.blue;
-				hardTime = MAX_HARD_TIME;
-			gameObject.layer = LayerName.HardBall;
-				break;
-			default:
-				color = Color.yellow;
-				break;
+			// Mainかどうかでデフォルトの色が変わる
+			color = (isMain) ? Color.yellow : Color.white;
+			_collider.isTrigger = false;
+			break;
+		case BallState.HARD:
+			color = Color.blue;
+			hardTime = MAX_HARD_TIME;
+			break;
+		default:
+			// Mainかどうかでデフォルトの色が変わる
+			color = (isMain) ? Color.yellow : Color.white;
+			_collider.isTrigger = false;
+			break;
 		}
 		setColor (color);
 	}
@@ -301,12 +306,12 @@ public class Ball : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collision pCollision) {
+	void OnTriggerEnter(Collider pCollider) {
 		// HARD以外ならTrigger無効
 		if (myBallState != BallState.HARD)
 			return;
-		if (pCollision.gameObject.tag == "Block") {
-			pCollision.gameObject.GetComponent<Block> ().HitByBall(this);
+		if (pCollider.gameObject.tag == "Block") {
+			pCollider.gameObject.GetComponent<Block> ().HitByBall(this);
 		}
 	}
 
@@ -344,7 +349,19 @@ public class Ball : MonoBehaviour {
 	void countHardTimer() {
 		hardTime -= Time.deltaTime;
 		if (hardTime <= 0) {
+			hardTime = 0;
 			setState ((int)BallState.DEFAULT);
+		}
+	}
+		
+	/// <summary>
+	/// HARD時、ボールがラケットに近い時はTriggerをOFFにする
+	/// </summary>
+	void setTriggerWhenHard() {
+		if (_gameManager._blockManager.checkIsNearRacket(this)) {
+			_collider.isTrigger = false;
+		} else {
+			_collider.isTrigger = true;
 		}
 	}
 	#endregion

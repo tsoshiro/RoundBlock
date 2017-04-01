@@ -17,6 +17,7 @@ public class BlockManager : MonoBehaviour {
 	// HARD BALL MODE
 	float HARD_TIME = 10f;
 	float hardTimer = 0f;
+	float MARGINE_ADJUSTER = 2;
 
 	// Use this for initialization
 	void Start () {
@@ -69,7 +70,7 @@ public class BlockManager : MonoBehaviour {
 		Vector3 v = new Vector3((float)Random.Range((int)edgeLeft, (int)edgeRight), 0, (float)Random.Range((int)edgeBottom, (int)edgeTop));
 		pBlock.transform.position = v;
 
-		addItem(pBlock);
+		setItemType(pBlock);
 		
 		//blockCount--;
 		//if (blockCount == 0) {
@@ -78,32 +79,40 @@ public class BlockManager : MonoBehaviour {
 		//}
 	}
 
-	bool checkIsItem() {
-		// 場に5個以上あるなら、アイテムを出さない。
+	/// <summary>
+	/// ItemTypeを決めるアルゴリズム
+	/// </summary>
+	/// <returns>The item type.</returns>
+	Const.ItemType decideItemType() {
 		int itemCounter = 0;
+		Const.ItemType itemType = Const.ItemType.NONE;
+
+		// 場に5個以上あるなら、アイテムを出さない。
 		for (int i = 0; i < _blockList.Count; i++) {
-			if (_blockList[i].getIsItem())
+			if (_blockList [i].getItemType () != Const.ItemType.NONE)
 				itemCounter++;
 			if (itemCounter >= ITEM_NUM)
-				return false;
-		}	     
+				return itemType;
+		}
 
 		// 20%の確率でアイテムを出す
 		int n = Random.Range(0, 100);
-		if (n <= 20)
-			return true;
-		return false;
-	}
-
-	void addItem(Block pBlock) {
-		// Item出すかどうかを判断
-		if (!checkIsItem())
-		{ // Item出ない
-			pBlock.setIsItem(false);
-		} else {
-			pBlock.setIsItem(true);
+		if (n <= 10) {
+			itemType = Const.ItemType.ADD_BALL;
+		} else if (n <= 40) {
+			itemType = Const.ItemType.HARD;
 		}
+		return itemType;
+	}
+		
+	void setItemType(Block pBlock) {
+		// ItemTypeを決定する
+		Const.ItemType itemType = decideItemType();
 
+		// ItemクラスにItemTypeを設定する
+		pBlock.setItemType(itemType);
+
+		// 色を変える
 		pBlock.setBlockColor ();
 	}
 
@@ -117,6 +126,26 @@ public class BlockManager : MonoBehaviour {
 			_blockList[i].setDefaultPosition();
 		}
 	}
+
+	#region HARD BALL METHOD
+	/// <summary>
+	/// ボール
+	/// 位置が、ブロックが出現する位置より外にある(=ラケットに近い)場合、trueを返す
+	/// </summary>
+	/// <returns><c>true</c>, if is near racket was checked, <c>false</c> otherwise.</returns>
+	/// <param name="pBall">P ball.</param>
+	public bool checkIsNearRacket(Ball pBall) {
+		Vector3 pos = pBall.gameObject.transform.position;
+		if (pos.z > edgeTop 	+ MARGINE_ADJUSTER||
+			pos.z < edgeBottom 	- MARGINE_ADJUSTER ||
+			pos.x > edgeRight	+ MARGINE_ADJUSTER||
+			pos.x < edgeLeft	- MARGINE_ADJUSTER) {
+			return true;
+		}
+		return false;
+	
+	}
+	#endregion
 
 	#region DEBUG
 	public void addMargineValue(float pFloat) {

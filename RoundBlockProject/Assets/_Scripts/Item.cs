@@ -9,41 +9,41 @@ public class Item : MonoBehaviour {
 	BallManager _ballManager;
 	BlockManager _blockManager;
 
-	enum ItemType {
-		ADD_BALL,
-		HARD,
-		WIDER_RACKET,
-		SHOT,
-		SUPER_SHOT
-	}
-
-	ItemType myType;
+	Const.ItemType myType;
 
 	// Use this for initialization
 	void Start () {
 		_gameManager = GameObject.Find("GameCtrl").GetComponent<GameManager>();
 		_ballManager = _gameManager._ballManager;
 		_blockManager = _gameManager._blockManager;
+		myType = Const.ItemType.NONE;
 	}
 
 	// ボール情報を受け取る
 	public void hit(Ball pBall) {
 		// よしなに処理
-
 		switch (myType) {
-			case ItemType.ADD_BALL:
+			case Const.ItemType.ADD_BALL:
 				addBall(pBall);
 				break;
-			case ItemType.HARD:
+			case Const.ItemType.HARD:
 				setBallHard (pBall);
 				break;
-			case ItemType.WIDER_RACKET:
+			case Const.ItemType.WIDER_RACKET:
 				break;
-			case ItemType.SHOT:
+			case Const.ItemType.SHOT:
 				break;
-			case ItemType.SUPER_SHOT:
+			case Const.ItemType.SUPER_SHOT:
 				break;
 		}
+	}
+
+	public void setItemType(Const.ItemType pItemType) {
+		myType = pItemType;
+	}
+
+	public Const.ItemType getItemType () {
+		return myType;
 	}
 
 	void setBallHard(Ball pBall) {
