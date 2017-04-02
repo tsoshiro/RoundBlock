@@ -32,6 +32,7 @@ public class Block : MonoBehaviour {
 			color = Color.blue;
 			break;
 		case Const.ItemType.WIDER_RACKET:
+			color = Color.cyan;
 			break;
 		case Const.ItemType.SHOT:
 			break;

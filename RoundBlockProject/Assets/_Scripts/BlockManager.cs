@@ -14,6 +14,12 @@ public class BlockManager : MonoBehaviour {
 	float MARGINE = 5f;
 	int ITEM_NUM = 5;
 
+	#region ITEM RATE
+	int RATE_ADD_BALL = 10;
+	int RATE_HARD 	= 10;
+	int RATE_WIDER 	= 30;
+	#endregion
+
 	// HARD BALL MODE
 	float HARD_TIME = 10f;
 	float hardTimer = 0f;
@@ -95,12 +101,14 @@ public class BlockManager : MonoBehaviour {
 				return itemType;
 		}
 
-		// 20%の確率でアイテムを出す
+		// 確率でアイテムを出す
 		int n = Random.Range(0, 100);
-		if (n <= 10) {
+		if (n <= RATE_ADD_BALL) {
 			itemType = Const.ItemType.ADD_BALL;
-		} else if (n <= 40) {
+		} else if (n <= RATE_ADD_BALL + RATE_HARD) {
 			itemType = Const.ItemType.HARD;
+		} else if (n <= RATE_ADD_BALL + RATE_HARD + RATE_WIDER) {
+			itemType = Const.ItemType.WIDER_RACKET;
 		}
 		return itemType;
 	}

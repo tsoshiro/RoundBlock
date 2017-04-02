@@ -30,6 +30,7 @@ public class Item : MonoBehaviour {
 				setBallHard (pBall);
 				break;
 			case Const.ItemType.WIDER_RACKET:
+				setRacketWide ();
 				break;
 			case Const.ItemType.SHOT:
 				break;
@@ -55,7 +56,7 @@ public class Item : MonoBehaviour {
 	}
 
 	void setRacketWide() {
-		
+		_gameManager._racket.transform.GetComponent<RacketSizeCtrl> ().addSize ();
 	}
 
 	void setShot() {

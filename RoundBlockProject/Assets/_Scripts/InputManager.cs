@@ -81,7 +81,7 @@ public class InputManager : MonoBehaviour {
 
 	#region Keyboard Control
 	[SerializeField]
-	float KEY_SPEED = 1f;
+	float KEY_SPEED = .5f;
 
 	void keyControl() {
 		setKeyDown ();

@@ -44,6 +44,9 @@ public class RacketCtrl : MonoBehaviour {
 	float z_diff_vertical;
 	#endregion
 
+	#region RacketSize
+	RacketSizeCtrl _racketSizeCtrl;
+	#endregion
 
 	// Use this for initialization
 	void Start () {
@@ -72,6 +75,15 @@ public class RacketCtrl : MonoBehaviour {
 		x_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.x - rig.transform.position.x;
 		z_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.z - rig.transform.position.z;
 		z_diff_vertical = otherRackets[(int)OtherRacketPosition.TOP].transform.position.z - rig.transform.position.z;
+
+		// RacketSizeCtrl初期化
+		_racketSizeCtrl = this.GetComponent<RacketSizeCtrl> ();
+		List<GameObject> rackets = new List<GameObject> ();
+		rackets.Add (this.gameObject);
+		for (int i = 0; i < otherRackets.Count; i++) {
+			rackets.Add (otherRackets [i].gameObject);
+		}
+		_racketSizeCtrl.Init (rackets);
 	}
 
 	// Update is called once per frame
