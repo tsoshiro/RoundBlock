@@ -35,8 +35,10 @@ public class Block : MonoBehaviour {
 			color = Color.cyan;
 			break;
 		case Const.ItemType.SHOT:
+			color = Color.magenta;
 			break;
 		case Const.ItemType.SUPER_SHOT:
+			color = Color.green;
 			break;		
 		default:
 			color = defColor;

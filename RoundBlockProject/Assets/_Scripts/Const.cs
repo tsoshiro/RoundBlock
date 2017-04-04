@@ -16,6 +16,7 @@ public class Const {
 		HARD,
 		WIDER_RACKET,
 		SHOT,
-		SUPER_SHOT
+		SUPER_SHOT,
+		FEVER
 	}
 }

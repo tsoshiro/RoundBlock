@@ -15,9 +15,19 @@ public class BlockManager : MonoBehaviour {
 	int ITEM_NUM = 5;
 
 	#region ITEM RATE
-	int RATE_ADD_BALL = 10;
-	int RATE_HARD 	= 10;
-	int RATE_WIDER 	= 30;
+	public List<int> RATE_LIST = new List<int> ();
+
+	// 自前のRATE設定クラス
+	[System.Serializable]
+	class RateSettings {
+		public int RATE_ADD_BALL 	= 10;
+		public int RATE_HARD 		= 10;
+		public int RATE_WIDER 		= 30;
+		public int RATE_SHOT 		= 0;
+		public int RATE_SUPER_SHOT 	= 0;
+		public int RATE_FEVER	 	= 0;
+	};
+
 	#endregion
 
 	// HARD BALL MODE
@@ -103,12 +113,13 @@ public class BlockManager : MonoBehaviour {
 
 		// 確率でアイテムを出す
 		int n = Random.Range(0, 100);
-		if (n <= RATE_ADD_BALL) {
-			itemType = Const.ItemType.ADD_BALL;
-		} else if (n <= RATE_ADD_BALL + RATE_HARD) {
-			itemType = Const.ItemType.HARD;
-		} else if (n <= RATE_ADD_BALL + RATE_HARD + RATE_WIDER) {
-			itemType = Const.ItemType.WIDER_RACKET;
+		int rate_value = 0;
+		for (int i = 0; i < RATE_LIST.Count; i++) {
+			rate_value += RATE_LIST [i];
+			if (n <= rate_value) {
+				itemType = (Const.ItemType)(i+1); // 0 : NONEなのでひとつずらす
+				break;
+			}
 		}
 		return itemType;
 	}
