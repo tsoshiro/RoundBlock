@@ -53,6 +53,7 @@
      <Compile Include="Assets\_Scripts\Block.cs" />
      <Compile Include="Assets\_Scripts\BlockDestroyAnimationManager.cs" />
      <Compile Include="Assets\_Scripts\BlockManager.cs" />
+     <Compile Include="Assets\_Scripts\Bullet.cs" />
      <Compile Include="Assets\_Scripts\Const.cs" />
      <Compile Include="Assets\_Scripts\DebugManager.cs" />
      <Compile Include="Assets\_Scripts\GameCtrl.cs" />
@@ -62,6 +63,7 @@
      <Compile Include="Assets\_Scripts\RacketCtrl.cs" />
      <Compile Include="Assets\_Scripts\RacketSizeCtrl.cs" />
      <Compile Include="Assets\_Scripts\ScoreManager.cs" />
+     <Compile Include="Assets\_Scripts\ShotCtrl.cs" />
      <Compile Include="Assets\_Scripts\TimeManager.cs" />
      <Compile Include="Assets\_Scripts\TouchMarkerCtrl.cs" />
  <Reference Include="UnityEngine.UI">

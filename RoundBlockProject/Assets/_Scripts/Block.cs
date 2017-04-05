@@ -57,11 +57,11 @@ public class Block : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "Ball") {
 			Ball ball = collision.gameObject.GetComponent<Ball> ();
-			HitByBall (ball);
+			HitBy (ball);
 		}
 	}
 
-	public void HitByBall(Ball pBall) {
+	public void HitBy(Ball pBall) {
 		if (_item.getItemType() != Const.ItemType.NONE) { // itemならば
 			_item.hit (pBall);
 		}
@@ -69,9 +69,17 @@ public class Block : MonoBehaviour {
 		_blockManager.removeBlock(this);
 	}
 
+	public void HitBy(Bullet pBullet) {
+		_blockManager.removeBlock(this);
+
+//		if (_item.getItemType () != Const.ItemType.NONE) {
+//			_item.hit (pBullet);
+//		}
+	}
+
 	bool checkIsBallHard(Ball pBall) {
 		if (pBall.myBallState == Ball.BallState.HARD) {
-			return true;	
+			return true;
 		}
 		return false;
 	}

@@ -311,7 +311,7 @@ public class Ball : MonoBehaviour {
 		if (myBallState != BallState.HARD)
 			return;
 		if (pCollider.gameObject.tag == "Block") {
-			pCollider.gameObject.GetComponent<Block> ().HitByBall(this);
+			pCollider.gameObject.GetComponent<Block> ().HitBy(this);
 		}
 	}
 
