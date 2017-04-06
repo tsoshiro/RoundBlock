@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RacketCtrl : MonoBehaviour {
-	// Top, Left, Rightのラケット 
-	public List<Rigidbody> otherRackets;
+	public List<Rigidbody> _rackets;
 
-	enum OtherRacketPosition {
+	public enum RacketPosition {
+		BOTTOM,
 		TOP,
 		LEFT,
 		RIGHT
 	}
+
 	Rigidbody rig;
 
 	#region INPUT
@@ -56,14 +57,14 @@ public class RacketCtrl : MonoBehaviour {
 	}
 
 	void Init() {
-		rig = this.GetComponent<Rigidbody>();
+		rig = _rackets [(int)RacketPosition.BOTTOM];
 
 		STAGE_WIDTH = _wallHorizontal.transform.localScale.x;
 		STAGE_HEIGHT = _wallVertical.transform.localScale.x;
 		height_width_rate = STAGE_HEIGHT / STAGE_WIDTH;
 
-		horizontalRacketWidth = this.transform.localScale.x;
-		verticalRacketWidth = otherRackets[(int)OtherRacketPosition.RIGHT].transform.localScale.x;
+		horizontalRacketWidth = _rackets [(int)RacketPosition.BOTTOM].transform.localScale.x;
+		verticalRacketWidth = _rackets[(int)RacketPosition.RIGHT].transform.localScale.x;
 
 		// ステージ幅の半分 - ラケットの半分 = 移動可能範囲の絶対値
 		//range_x = STAGE_WIDTH * 0.5f - horizontalRacketWidth * 0.5f;
@@ -72,18 +73,20 @@ public class RacketCtrl : MonoBehaviour {
 		range_x = STAGE_WIDTH * 0.5f;
 		range_z = STAGE_HEIGHT * 0.5f;
 
-		x_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.x - rig.transform.position.x;
-		z_diff_horizontal = otherRackets[(int)OtherRacketPosition.RIGHT].transform.position.z - rig.transform.position.z;
-		z_diff_vertical = otherRackets[(int)OtherRacketPosition.TOP].transform.position.z - rig.transform.position.z;
+		x_diff_horizontal	= _rackets[(int)RacketPosition.RIGHT].transform.position.x - rig.transform.position.x;
+		z_diff_horizontal 	= _rackets[(int)RacketPosition.RIGHT].transform.position.z - rig.transform.position.z;
+		z_diff_vertical 	= _rackets[(int)RacketPosition.TOP].transform.position.z - rig.transform.position.z;
 
+
+		// TODO
 		// RacketSizeCtrl初期化
 		_racketSizeCtrl = this.GetComponent<RacketSizeCtrl> ();
-		List<GameObject> rackets = new List<GameObject> ();
-		rackets.Add (this.gameObject);
-		for (int i = 0; i < otherRackets.Count; i++) {
-			rackets.Add (otherRackets [i].gameObject);
+		List<GameObject> racketsObj = new List<GameObject> ();
+		racketsObj.Add (this.gameObject);
+		for (int i = 0; i < _rackets.Count; i++) {
+			racketsObj.Add (_rackets [i].gameObject);
 		}
-		_racketSizeCtrl.Init (rackets);
+		_racketSizeCtrl.Init (racketsObj);
 	}
 
 	// Update is called once per frame
@@ -118,16 +121,17 @@ public class RacketCtrl : MonoBehaviour {
 
 	// Transformの方が適切な動きする。
 	void MoveWithTransform(Vector3 worldPos) {
-		Vector3 target = new Vector3(worldPos.x, 0, this.transform.position.z);
+		Vector3 target = new Vector3(worldPos.x, 0, _rackets[(int)RacketPosition.BOTTOM].transform.position.z);
 		if (target.x <= -range_x) {
 			target.x = -range_x;
 		} else if (target.x >= range_x) {
 			target.x = range_x;
 		}
 
-		this.transform.position = target;
+		MoveRackets (target);
 
-		MoveOtherRackets(target);
+//		_rackets[(int)RacketPosition.BOTTOM].transform.position = target;
+//		MoveOtherRackets(target);
 	}
 
 	void MoveWithVelocity(Vector3 worldPos) {
@@ -141,26 +145,24 @@ public class RacketCtrl : MonoBehaviour {
 		Vector3 desiredVelocity = (target - transform.position).normalized * speed;
 
 		float sqrMag = (target - transform.position).sqrMagnitude;
-		this.GetComponent<Rigidbody>().velocity = desiredVelocity;
-
-		MoveOtherRackets(desiredVelocity);
+		MoveRackets(desiredVelocity);
 	}
 
-	void MoveOtherRackets(Vector3 pVelocity) {
-		for (int i = 0; i < otherRackets.Count; i++) {
-			if (!otherRackets[i].gameObject.activeSelf) {
+	void MoveRackets(Vector3 pVelocity) {
+		for (int i = 0; i < _rackets.Count; i++) {
+			if (!_rackets[i].gameObject.activeSelf) {
 				return;
 			}
-			Vector3 v = exchangeVector(pVelocity, (OtherRacketPosition)i, isVelocity);
+			Vector3 v = exchangeVector(pVelocity, (RacketPosition)i, isVelocity);
 			if (isVelocity)	{
-				otherRackets[i].velocity = v;
+				_rackets[i].velocity = v;
 			} else {
-				otherRackets[i].transform.position = v;
+				_rackets[i].transform.position = v;
 			}
 		}
 	}
 
-	Vector3 exchangeVector(Vector3 pVelocity, OtherRacketPosition pRacketPos, bool pIsVelocity = true) {
+	Vector3 exchangeVector(Vector3 pVelocity, RacketPosition pRacketPos, bool pIsVelocity = true) {
 		Vector3 v = pVelocity;
 
 		if (pIsVelocity) {
@@ -173,15 +175,17 @@ public class RacketCtrl : MonoBehaviour {
 	}
 
 	// Transform
-	Vector3 exchangeTransformVector(Vector3 pVelocity, OtherRacketPosition pRacketPos) {
+	Vector3 exchangeTransformVector(Vector3 pVelocity, RacketPosition pRacketPos) {
 		Vector3 v = pVelocity;
 
-		// 左右反転
-		if (pRacketPos == OtherRacketPosition.TOP)
+		if (pRacketPos == RacketPosition.BOTTOM) 		// BOTTOM → そのまま
+		{
+			return v;
+		} else if (pRacketPos == RacketPosition.TOP)	// TOP
 		{
 			v.x = - v.x;
 			v.z += z_diff_vertical;
-		} else if (pRacketPos == OtherRacketPosition.LEFT) {
+		} else if (pRacketPos == RacketPosition.LEFT) { // LEFT
 			// XとZを交代
 			float tmp = - (v.x - x_diff_horizontal) * STAGE_HEIGHT / STAGE_WIDTH;
 			v.x = - x_diff_horizontal;
@@ -197,21 +201,28 @@ public class RacketCtrl : MonoBehaviour {
 	}
 
 	// Velocity
-	Vector3 exchangeVelocityVector(Vector3 pVelocity, OtherRacketPosition pRacketPos) {
+	Vector3 exchangeVelocityVector(Vector3 pVelocity, RacketPosition pRacketPos) {
 		Vector3 v = pVelocity;
 
-		if (pRacketPos == OtherRacketPosition.TOP) {
+		if (pRacketPos == RacketPosition.BOTTOM) {
+			return v;
+		} else if (pRacketPos == RacketPosition.TOP) {
 			v.x = -v.x;
-		} else if (pRacketPos == OtherRacketPosition.LEFT) {
+		} else if (pRacketPos == RacketPosition.LEFT) {
 			float tmp = -v.x * STAGE_HEIGHT / STAGE_WIDTH;
 			v.x = v.z;
 			v.z = tmp;
-		} else {
+		} else { // RIGHT
 			float tmp = v.x * STAGE_HEIGHT / STAGE_WIDTH;
 			v.x = v.z;
 			v.z = tmp;
 		}
 		return v;
+	}
+
+
+	public GameObject getRacket(int pRacketPosition) {
+		return _rackets [pRacketPosition].gameObject;
 	}
 
 	#region DEBUG

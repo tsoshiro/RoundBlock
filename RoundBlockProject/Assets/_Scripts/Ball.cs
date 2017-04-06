@@ -114,7 +114,7 @@ public class Ball : MonoBehaviour {
 	void setStartPosition() {
 		Vector3 pos = defaultPosition;
 		if (isMain) {
-			pos.x = _racketCtrl.gameObject.transform.position.x;
+			pos.x = _racketCtrl._rackets[(int)RacketCtrl.RacketPosition.BOTTOM].gameObject.transform.position.x;
 		}
 		this.transform.position = pos;
 		if (!isMain) {
@@ -255,7 +255,7 @@ public class Ball : MonoBehaviour {
 		Vector3 v;
 		float width = pGameObject.transform.localScale.x;
 
-		if (pGameObject.name == "Racket" || pGameObject.name == "Racket_Top")
+		if (pGameObject.name == "Racket_Bottom" || pGameObject.name == "Racket_Top")
 		{
 			// HORIZONTAL
 			distanceFromCenter = this.transform.position.x - pGameObject.transform.position.x;

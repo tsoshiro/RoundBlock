@@ -55,11 +55,11 @@ public class BlockManager : MonoBehaviour {
 	}
 
 	void setEdges() {
-		_racketCtrl = GameObject.Find("Racket").GetComponent<RacketCtrl>();
-		edgeTop	   	= _racketCtrl.otherRackets[0].transform.position.z - MARGINE;
-		edgeLeft	= _racketCtrl.otherRackets[1].transform.position.x + MARGINE;
-		edgeRight 	= _racketCtrl.otherRackets[2].transform.position.x - MARGINE;
-		edgeBottom 	= _racketCtrl.gameObject.transform.position.z + MARGINE;
+		_racketCtrl = GameObject.Find("Rackets").GetComponent<RacketCtrl>();
+		edgeBottom 	= _racketCtrl._rackets[(int)RacketCtrl.RacketPosition.BOTTOM].transform.position.z + MARGINE;
+		edgeTop	   	= _racketCtrl._rackets[(int)RacketCtrl.RacketPosition.TOP].transform.position.z - MARGINE;
+		edgeLeft	= _racketCtrl._rackets[(int)RacketCtrl.RacketPosition.LEFT].transform.position.x + MARGINE;
+		edgeRight 	= _racketCtrl._rackets[(int)RacketCtrl.RacketPosition.RIGHT].transform.position.x - MARGINE;
 	}
 
 	void setAnimation() {

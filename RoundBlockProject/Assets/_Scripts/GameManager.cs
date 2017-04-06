@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
 	public Ball _ball;
 	public RacketCtrl _racket;
+	public ShotCtrl _shot;
 
 	public GameState state;
 	ScoreManager _scoreManager;

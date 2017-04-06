@@ -43,22 +43,56 @@ public class ShotCtrl : MonoBehaviour {
 		
 	}
 
+	// タイマー処理
 	void activate() {
 		
 	}
 
 	IEnumerator shootLoop() {
 		while (isActive) {
-			shoot ();
+			loopShot ();
 			yield return new WaitForSeconds (interval);
 		}
 	}
 
-	void shoot() {
+	void loopShot() {
+		for (int i = 0; i < _gameManager._racket._rackets.Count; i++) {
+			shoot((RacketCtrl.RacketPosition)i);
+		}
+	}
+
+	Vector3 getDirection(RacketCtrl.RacketPosition pRacketPosition) {
+		Vector3 v = Vector3.forward;
+		switch (pRacketPosition) {
+		case RacketCtrl.RacketPosition.BOTTOM:
+			v = Vector3.forward;
+			break;
+		case RacketCtrl.RacketPosition.TOP:
+			v = Vector3.back;
+			break;
+		case RacketCtrl.RacketPosition.LEFT:
+			v = Vector3.right;
+			break;
+		case RacketCtrl.RacketPosition.RIGHT:
+			v = Vector3.left;
+			break;
+		}
+		return v;
+	}
+
+	void shoot(RacketCtrl.RacketPosition pRacketPosition) {
 		// DirectionとMagnitudeを設定し、発射元から発射
-		Vector3 direction = Vector3.forward;
+		Vector3 direction = getDirection(pRacketPosition);
 		bullets [counter].gameObject.SetActive (true);
-		bullets [counter].transform.position = _gameManager._racket.gameObject.transform.position;
+		bullets [counter].transform.position = _gameManager._racket._rackets[(int)pRacketPosition].gameObject.transform.position;
+
+		// 角度管理
+		if (pRacketPosition == RacketCtrl.RacketPosition.LEFT) {
+			bullets [counter].transform.Rotate (0, -90, 0);
+		} else if (pRacketPosition == RacketCtrl.RacketPosition.RIGHT) {
+			bullets [counter].transform.Rotate (0, 90, 0);
+		}
+
 		bullets [counter].Init (direction, magnitude, _gameManager._racket.gameObject);
 
 		counter++;

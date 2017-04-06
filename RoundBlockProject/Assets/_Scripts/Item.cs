@@ -60,6 +60,6 @@ public class Item : MonoBehaviour {
 	}
 
 	void setShot() {
-		
+//		_gameManager._shot.
 	}
 }
