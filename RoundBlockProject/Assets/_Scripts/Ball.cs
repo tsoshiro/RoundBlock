@@ -53,7 +53,6 @@ public class Ball : MonoBehaviour {
 	// 追加ボールの時、ドロップ時の戻り先をセットしておく
 	public void InitAddBall(GameObject pParent) {
 		defaultPosition = pParent.transform.position;
-		Debug.Log(this.gameObject.name+"\ndefaultPosition:"+defaultPosition + " pParent.transform.position:"+pParent.transform.position);
 		setIsMain(false);
 		setIsMoving (true);
 	}

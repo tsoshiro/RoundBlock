@@ -50,8 +50,16 @@ public class ShotCtrl : MonoBehaviour {
 
 	IEnumerator shootLoop() {
 		while (isActive) {
-			loopShot ();
+//			loopShot ();
+			yield return StartCoroutine(loopShotCoroutine());
 			yield return new WaitForSeconds (interval);
+		}
+	}
+
+	IEnumerator loopShotCoroutine() {
+		for (int i = 0; i < _gameManager._racket._rackets.Count; i++) {
+			shoot((RacketCtrl.RacketPosition)i);
+			yield return new WaitForSeconds (0.5f);
 		}
 	}
 
@@ -85,11 +93,14 @@ public class ShotCtrl : MonoBehaviour {
 		Vector3 direction = getDirection(pRacketPosition);
 		bullets [counter].gameObject.SetActive (true);
 		bullets [counter].transform.position = _gameManager._racket._rackets[(int)pRacketPosition].gameObject.transform.position;
+		bullets [counter].setRacketPosition (pRacketPosition);
 
 		// 角度管理
-		if (pRacketPosition == RacketCtrl.RacketPosition.LEFT) {
-			bullets [counter].transform.Rotate (0, -90, 0);
-		} else if (pRacketPosition == RacketCtrl.RacketPosition.RIGHT) {
+		if (pRacketPosition == RacketCtrl.RacketPosition.LEFT ||
+//		) {
+//			bullets [counter].transform.Rotate (0, -90, 0);
+//		} else if (
+			pRacketPosition == RacketCtrl.RacketPosition.RIGHT) {
 			bullets [counter].transform.Rotate (0, 90, 0);
 		}
 
@@ -103,6 +114,14 @@ public class ShotCtrl : MonoBehaviour {
 
 	public void inactivate(Bullet pBullet) {
 		pBullet.transform.position = _bulletPool.transform.position;
+
+		// 元に戻す
+		if (pBullet.getRacketPosition () == RacketCtrl.RacketPosition.LEFT ||
+		    pBullet.getRacketPosition () == RacketCtrl.RacketPosition.RIGHT) 
+		{
+			pBullet.transform.Rotate (0, -90, 0);
+		}
+
 		pBullet.gameObject.SetActive (false);
 	}
 }

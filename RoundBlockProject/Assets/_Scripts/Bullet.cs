@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour {
 	float magnitude;
 	GameObject parentRacket;
 	Rigidbody rigid;
+	RacketCtrl.RacketPosition racketPosition;
 
 	bool isHard = false;
 
@@ -40,8 +41,19 @@ public class Bullet : MonoBehaviour {
 		rigid.velocity = v * magnitude;
 	}
 
+	float DIST_SETTING = 40;
+
+	/// <summary>
+	/// Checks the in area.
+	/// </summary>
+	/// <returns><c>true</c>, if in area was checked, <c>false</c> otherwise.</returns>
 	bool checkInArea() {
-		return true;
+		// 仮処理 TODO Wallsからの距離を測る。Ballクラスの処理を外部に切り出して流用したい。
+		float dist = Vector3.Distance (this.transform.position, parentRacket.transform.position);
+		if (Mathf.Abs(dist) <= DIST_SETTING) {		
+			return true;
+		}
+		return false;
 	}
 
 	void OnTriggerEnter(Collider pCollider) {
@@ -58,5 +70,13 @@ public class Bullet : MonoBehaviour {
 	void finishSelf() {
 		rigid.velocity = Vector3.zero;
 		_shotCtrl.inactivate (this);
+	}
+
+	public void setRacketPosition(RacketCtrl.RacketPosition pRacketPosition) {
+		racketPosition = pRacketPosition;
+	}
+
+	public RacketCtrl.RacketPosition getRacketPosition() {
+		return racketPosition;
 	}
 }

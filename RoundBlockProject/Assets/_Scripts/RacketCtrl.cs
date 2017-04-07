@@ -77,9 +77,6 @@ public class RacketCtrl : MonoBehaviour {
 		z_diff_horizontal 	= _rackets[(int)RacketPosition.RIGHT].transform.position.z - rig.transform.position.z;
 		z_diff_vertical 	= _rackets[(int)RacketPosition.TOP].transform.position.z - rig.transform.position.z;
 
-
-		// TODO
-		// RacketSizeCtrl初期化
 		_racketSizeCtrl = this.GetComponent<RacketSizeCtrl> ();
 		List<GameObject> racketsObj = new List<GameObject> ();
 		racketsObj.Add (this.gameObject);
