@@ -5,9 +5,12 @@ using UnityEngine;
 public class BallManager : MonoBehaviour {
 	public List<Ball> _balls = new List<Ball>();
 
+	public Ball _mainBall;
 	public GameObject _ballPrefab;
 	int n = 5; // Ball Prefabの値
 	int counter = 0;
+
+	float magnitudeDefault = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +29,8 @@ public class BallManager : MonoBehaviour {
 			_balls.Add(obj.GetComponent<Ball>());
 			obj.SetActive(false);
 		}
+
+		magnitudeDefault = _mainBall.magnitude;
 	}
 
 	/// <summary>
@@ -72,6 +77,26 @@ public class BallManager : MonoBehaviour {
 		counter++;
 		if (counter >= n) {
 			counter = 0;
+		}
+	}
+
+	public void setAllBallsMagnitudeDefault() {
+		setAllBallsMagnitude (magnitudeDefault);	
+	}
+
+	public void setAllBallsMagnitudeMax() {
+		setAllBallsMagnitude (magnitudeDefault * 1.5f);	
+	}
+
+	public void setAllBallsMagnitude(float pMagnitude) {
+		// Main
+		_mainBall.magnitude = pMagnitude;
+		_mainBall.reloadVelocity ();
+
+		// AddBalls
+		for (int i = 0; i < _balls.Count; i++) {
+			_balls [i].magnitude = pMagnitude;
+			_balls [i].reloadVelocity ();
 		}
 	}
 }

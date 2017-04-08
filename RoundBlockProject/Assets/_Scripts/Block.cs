@@ -39,7 +39,10 @@ public class Block : MonoBehaviour {
 			break;
 		case Const.ItemType.SUPER_SHOT:
 			color = Color.green;
-			break;		
+			break;
+		case Const.ItemType.FEVER:
+			color = Color.black;
+			break;
 		default:
 			color = defColor;
 			break;

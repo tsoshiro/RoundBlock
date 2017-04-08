@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour {
 	public GameManager _gameManager;
+	public WallManager _wallManager;
 
 	public float VEC_X = 5f;
 	public float VEC_Z = 5f;
@@ -27,8 +28,6 @@ public class Ball : MonoBehaviour {
 	Collider _collider;
 
 	// リセット位置
-	public List<GameObject> _walls;
-	List<Vector3> _wallPositions;
 	public RacketCtrl _racketCtrl;
 	bool isMoving = false;
 
@@ -40,12 +39,12 @@ public class Ball : MonoBehaviour {
 		GameObject _gameCtrl = GameObject.Find("GameCtrl");
 		_inputManager = _gameCtrl.GetComponent<InputManager>();
 		_gameManager = _gameCtrl.GetComponent<GameManager>();
+		_wallManager = _gameManager._wallManager;
 		_collider = gameObject.GetComponent<Collider> ();
 
 		myBallState = BallState.DEFAULT;
 
 		defaultPosition = this.transform.position;
-		setWallPositions();
 
 		rigid = this.GetComponent<Rigidbody>();
 	}
@@ -121,13 +120,6 @@ public class Ball : MonoBehaviour {
 		}
 	}
 
-	void setWallPositions() {
-		_wallPositions = new List<Vector3>();
-		for (int i = 0; i < _walls.Count; i++) {
-			_wallPositions.Add(_walls[i].transform.position);
-		}
-	}
-
 	void resetPositionWhenOut() {
 		if (checkIsOut()) {
 			resetBall();
@@ -153,7 +145,7 @@ public class Ball : MonoBehaviour {
 
 	bool checkIsOut() {
 		bool flg;
-		for (int i = 0; i < _wallPositions.Count; i++) {
+		for (int i = 0; i < _wallManager._wallPositions.Count; i++) {
 			flg = checkIsOver(i);
 			if (flg) {
 				return flg;
@@ -164,13 +156,13 @@ public class Ball : MonoBehaviour {
 
 	bool checkIsOver(int pWallPosition) {
 		if (pWallPosition == (int)Const.WallPosition.TOP) {
-			return checkIsUpThanZ(_wallPositions[pWallPosition].z);
+			return checkIsUpThanZ(_wallManager._wallPositions[pWallPosition].z);
 		} else if (pWallPosition == (int)Const.WallPosition.RIGHT) {
-			return checkIsRightThanX(_wallPositions[pWallPosition].x);
+			return checkIsRightThanX(_wallManager._wallPositions[pWallPosition].x);
 		} else if (pWallPosition == (int)Const.WallPosition.BOTTOM) {
-			return checkIsDownThanZ(_wallPositions[pWallPosition].x);
+			return checkIsDownThanZ(_wallManager._wallPositions[pWallPosition].x);
 		} else if (pWallPosition == (int)Const.WallPosition.LEFT) {
-			return checkIsLeftThanX(_wallPositions[pWallPosition].x);
+			return checkIsLeftThanX(_wallManager._wallPositions[pWallPosition].x);
 		}
 		return false;
 	}
@@ -224,6 +216,12 @@ public class Ball : MonoBehaviour {
 		v.Normalize();
 
 		rigid.velocity = v * magnitude;
+	}
+
+	public void reloadVelocity() {
+		if (rigid != null) {
+			setMagnitude (rigid.velocity);
+		}
 	}
 
 	void checkVelocity() {

@@ -15,12 +15,14 @@ public class GameManager : MonoBehaviour
 	public Ball _ball;
 	public RacketCtrl _racket;
 	public ShotCtrl _shot;
+	public FeverCtrl _feverCtrl;
 
 	public GameState state;
 	ScoreManager _scoreManager;
 	TimeManager _timeManager;
 	public BlockManager _blockManager;
 	public BallManager _ballManager;
+	public WallManager _wallManager;
 
 	int SCORE_PER_BLOCK = 100;
 	float ADD_TIME_PER_BLOCK = 1f;

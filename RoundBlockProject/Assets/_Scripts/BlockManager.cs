@@ -32,8 +32,6 @@ public class BlockManager : MonoBehaviour {
 	#endregion
 
 	// HARD BALL MODE
-	float HARD_TIME = 10f;
-	float hardTimer = 0f;
 	float MARGINE_ADJUSTER = 2;
 
 	// Use this for initialization

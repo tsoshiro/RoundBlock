@@ -38,6 +38,9 @@ public class Item : MonoBehaviour {
 		case Const.ItemType.SUPER_SHOT:
 			setSuperShot ();
 			break;
+		case Const.ItemType.FEVER:
+			setFever ();
+			break;
 		}
 	}
 
@@ -67,5 +70,9 @@ public class Item : MonoBehaviour {
 
 	void setSuperShot() {
 		_gameManager._shot.activateHard ();
+	}
+
+	void setFever() {
+		_gameManager._feverCtrl.startFever ();
 	}
 }
