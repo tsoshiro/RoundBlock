@@ -15,6 +15,7 @@ public class BlockManager : MonoBehaviour {
 	int ITEM_NUM = 5;
 
 	#region ITEM RATE
+	// 0:ADD_BALL 1:HARD 2:WIDER 3:SHOT 4:SUPER_SHOT 5:FEVER
 	public List<int> RATE_LIST = new List<int> ();
 
 	// 自前のRATE設定クラス

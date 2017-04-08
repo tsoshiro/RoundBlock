@@ -69,7 +69,7 @@ public class Bullet : MonoBehaviour {
 	// 自分を	InActiveにし、Poolに戻る
 	void finishSelf() {
 		rigid.velocity = Vector3.zero;
-		_shotCtrl.inactivate (this);
+		_shotCtrl.inactivateBullet (this);
 	}
 
 	public void setRacketPosition(RacketCtrl.RacketPosition pRacketPosition) {
@@ -78,5 +78,9 @@ public class Bullet : MonoBehaviour {
 
 	public RacketCtrl.RacketPosition getRacketPosition() {
 		return racketPosition;
+	}
+
+	public void setHard(bool pFlg) {
+		isHard = pFlg;
 	}
 }

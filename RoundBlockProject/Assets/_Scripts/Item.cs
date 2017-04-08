@@ -23,19 +23,21 @@ public class Item : MonoBehaviour {
 	public void hit(Ball pBall) {
 		// よしなに処理
 		switch (myType) {
-			case Const.ItemType.ADD_BALL:
-				addBall(pBall);
-				break;
-			case Const.ItemType.HARD:
-				setBallHard (pBall);
-				break;
-			case Const.ItemType.WIDER_RACKET:
-				setRacketWide ();
-				break;
-			case Const.ItemType.SHOT:
-				break;
-			case Const.ItemType.SUPER_SHOT:
-				break;
+		case Const.ItemType.ADD_BALL:
+			addBall(pBall);
+			break;
+		case Const.ItemType.HARD:
+			setBallHard (pBall);
+			break;
+		case Const.ItemType.WIDER_RACKET:
+			setRacketWide ();
+			break;
+		case Const.ItemType.SHOT:		
+			setShot ();
+			break;
+		case Const.ItemType.SUPER_SHOT:
+			setSuperShot ();
+			break;
 		}
 	}
 
@@ -60,6 +62,10 @@ public class Item : MonoBehaviour {
 	}
 
 	void setShot() {
-//		_gameManager._shot.
+		_gameManager._shot.activate ();
+	}
+
+	void setSuperShot() {
+		_gameManager._shot.activateHard ();
 	}
 }

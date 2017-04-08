@@ -49,8 +49,6 @@ public class BallManager : MonoBehaviour {
 	/// <param name="pBlock">ヒットしたブロック</param>
 
 	public void addBall(Ball pBall, Block pBlock = null) {
-		Debug.Log ("addBall called:" + pBall + " " + pBlock);
-
 		// 全て出払っている場合
 		if (!checkIsBallAvailable()) {
 			Debug.Log("NO BALL AVAILABLE");
@@ -75,10 +73,5 @@ public class BallManager : MonoBehaviour {
 		if (counter >= n) {
 			counter = 0;
 		}
-		Debug.Log ("counter:" + counter);
-	}
-
-	void setHard() {
-		
 	}
 }

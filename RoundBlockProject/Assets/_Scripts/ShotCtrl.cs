@@ -8,8 +8,12 @@ public class ShotCtrl : MonoBehaviour {
 	int bulletNum = 50;
 	int counter = 0;
 
+
 	float interval = 5f;
+	float shortenRate = 0.9f;
+	float interval_first_value = 5f;
 	public bool isActive = false;
+	public bool isHard = false;
 
 	public GameObject _bulletPrefab;
 	public GameObject _bulletPool;
@@ -17,11 +21,19 @@ public class ShotCtrl : MonoBehaviour {
 
 	public float magnitude = 10f;
 
+	public float ADD_TIME = 10f;
+	float time = 0f;
+
+	public float ADD_HARD_TIME = 5f;
+	float hardTime = 0f;
+
+
 	// Use this for initialization
 	void Start () {
 		_gameManager = this.GetComponent<GameManager> ();
 		createBullets ();
-		StartCoroutine (shootLoop ());
+
+		interval = interval_first_value;
 	}
 
 	void createBullets() {
@@ -40,12 +52,93 @@ public class ShotCtrl : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+		if (!isActive)
+			return;
+
+		// Activeなら、タイマーカウントダウン処理
+		countTimers();
+	}
+
+	void countTimers() {
+		if (isHard) {
+			countHardTimer ();
+			return;
+		}
+		if (isActive) {
+			countTimer ();
+		}
+	}
+
+	void countHardTimer() {
+		hardTime -= Time.deltaTime;
+		checkHard ();
+	}
+
+	void checkHard() {
+		if (hardTime <= 0) {
+			hardTime = 0;
+			isHard = false;
+
+			// timeもゼロ以下ならactiveもfalseにする
+			checkTime();
+		}
+	}
+
+	void countTimer() {
+		time -= Time.deltaTime;
+		checkTime ();
+	}
+
+	void checkTime() {
+		if (time <= 0) {
+			time = 0;
+			isActive = false;
+			StopCoroutine (shootLoop ());
+		}
+	}
+
+	public void activateHard() {
+		hardTime += ADD_HARD_TIME;
+
+		if (!isActive) {
+			isHard = true;
+			isActive = true;
+			StartCoroutine (shootLoop ());
+		}
+
+		if (isHard)
+			return;
+
+		isHard = true;
 	}
 
 	// タイマー処理
-	void activate() {
-		
+	public void activate() {
+		// タイマーを追加
+		time += ADD_TIME;
+
+		// すでにアクティブならここで終了
+		if (isActive)
+			return;
+
+		// 未アクティブだったのであればアクティブにし、コルーチン開始
+		isActive = true;
+		StartCoroutine (shootLoop ());
+	}
+
+
+	/// <summary>
+	/// インターバル時間を短くする
+	/// </summary>
+	void shortenInterval() {
+		interval *= shortenRate;
+	}
+
+	/// <summary>
+	/// インターバル時間を初期値に戻す
+	/// </summary>
+	void resetInterval() {
+		interval = interval_first_value;
 	}
 
 	IEnumerator shootLoop() {
@@ -95,6 +188,10 @@ public class ShotCtrl : MonoBehaviour {
 		bullets [counter].transform.position = _gameManager._racket._rackets[(int)pRacketPosition].gameObject.transform.position;
 		bullets [counter].setRacketPosition (pRacketPosition);
 
+		// NORMAL/HARD SETTINGS
+		bullets [counter].gameObject.GetComponent<MeshRenderer> ().material.color = getColor ();
+		bullets [counter].setHard (isHard);
+
 		// 角度管理
 		if (pRacketPosition == RacketCtrl.RacketPosition.LEFT ||
 //		) {
@@ -112,7 +209,14 @@ public class ShotCtrl : MonoBehaviour {
 		}
 	}
 
-	public void inactivate(Bullet pBullet) {
+	Color getColor() {
+		if (isHard)
+			return Color.green;
+		return Color.magenta;
+	}
+
+
+	public void inactivateBullet(Bullet pBullet) {
 		pBullet.transform.position = _bulletPool.transform.position;
 
 		// 元に戻す
