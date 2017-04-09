@@ -17,6 +17,7 @@ public class Const {
 		WIDER_RACKET,
 		SHOT,
 		SUPER_SHOT,
-		FEVER
+		FEVER,
+		ADD_TIME
 	}
 }

@@ -19,14 +19,17 @@ public class GameManager : MonoBehaviour
 
 	public GameState state;
 	ScoreManager _scoreManager;
-	TimeManager _timeManager;
+	public TimeManager _timeManager;
 	public BlockManager _blockManager;
 	public BallManager _ballManager;
 	public WallManager _wallManager;
 
+	#region SETTINGS
 	int SCORE_PER_BLOCK = 100;
 	float ADD_TIME_PER_BLOCK = 1f;
 	float SUB_TIME_PER_MISS = 5f;
+	float ADD_TIME_PER_TIME_BLOCK = 3f;
+	#endregion
 
 	// Use this for initialization
 	void Start()
@@ -130,5 +133,9 @@ public class GameManager : MonoBehaviour
 	public void dropBall() {
 		// 制限時間を減算
 		_timeManager.addTime(- SUB_TIME_PER_MISS);
+	}
+
+	public void addTimeBlock() {
+		_timeManager.addTime (ADD_TIME_PER_TIME_BLOCK);
 	}
 }

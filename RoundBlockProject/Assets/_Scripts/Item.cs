@@ -41,6 +41,9 @@ public class Item : MonoBehaviour {
 		case Const.ItemType.FEVER:
 			setFever ();
 			break;
+		case Const.ItemType.ADD_TIME:
+			addTime ();
+			break;
 		}
 	}
 
@@ -74,5 +77,9 @@ public class Item : MonoBehaviour {
 
 	void setFever() {
 		_gameManager._feverCtrl.startFever ();
+	}
+
+	void addTime() {
+		_gameManager.addTimeBlock ();
 	}
 }

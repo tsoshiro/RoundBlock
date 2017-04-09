@@ -17,6 +17,7 @@ public class BlockManager : MonoBehaviour {
 	#region ITEM RATE
 	// 0:ADD_BALL 1:HARD 2:WIDER 3:SHOT 4:SUPER_SHOT 5:FEVER
 	public List<int> RATE_LIST = new List<int> ();
+	public int total = 100; // RATEの合計
 
 	// 自前のRATE設定クラス
 	[System.Serializable]
@@ -51,6 +52,8 @@ public class BlockManager : MonoBehaviour {
 				_blockList.Add(block);
 			}
 		}
+
+		total = getTotalValue ();
 	}
 
 	void setEdges() {
@@ -111,7 +114,7 @@ public class BlockManager : MonoBehaviour {
 		}
 
 		// 確率でアイテムを出す
-		int n = Random.Range(0, 100);
+		int n = Random.Range(0, total);
 		int rate_value = 0;
 		for (int i = 0; i < RATE_LIST.Count; i++) {
 			rate_value += RATE_LIST [i];
@@ -121,6 +124,14 @@ public class BlockManager : MonoBehaviour {
 			}
 		}
 		return itemType;
+	}
+
+	int getTotalValue() {
+		int value = 0;
+		for (int i = 0; i < RATE_LIST.Count; i++) {
+			value += RATE_LIST [i];
+		}
+		return value;
 	}
 		
 	void setItemType(Block pBlock) {

@@ -43,6 +43,9 @@ public class Block : MonoBehaviour {
 		case Const.ItemType.FEVER:
 			color = Color.black;
 			break;
+		case Const.ItemType.ADD_TIME:
+			color = Color.yellow;
+			break;
 		default:
 			color = defColor;
 			break;
