@@ -56,7 +56,7 @@ public class BallManager : MonoBehaviour {
 	public void addBall(Ball pBall, Block pBlock = null) {
 		// 全て出払っている場合
 		if (!checkIsBallAvailable()) {
-			Debug.Log("NO BALL AVAILABLE");
+			DebugLogger.Log("NO BALL AVAILABLE");
 			return;
 		}
 
