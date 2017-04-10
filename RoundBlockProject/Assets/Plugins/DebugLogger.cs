@@ -8,4 +8,9 @@ public static class DebugLogger {
 	public static void Log(object o) {
 		UnityEngine.Debug.Log (o);
 	}
+
+	[Conditional("UNITY_EDITOR")]
+	public static void LogWarning(object o) {
+		UnityEngine.Debug.LogWarning (o);
+	}
 }
