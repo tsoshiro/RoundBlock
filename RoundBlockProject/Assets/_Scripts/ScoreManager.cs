@@ -30,4 +30,8 @@ public class ScoreManager : MonoBehaviour {
 	public void setScoreText(string pString) {
 		_scoreLabel.text = "SCORE : " + pString;
 	}
+
+	public int getScore() {
+		return score;
+	}
 }

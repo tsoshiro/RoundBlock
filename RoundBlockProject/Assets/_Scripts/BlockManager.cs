@@ -15,9 +15,11 @@ public class BlockManager : MonoBehaviour {
 	int ITEM_NUM = 5;
 
 	#region ITEM RATE
+	DataCtrl dataCtrl;
+
 	// 0:ADD_BALL 1:HARD 2:WIDER 3:SHOT 4:SUPER_SHOT 5:FEVER
-	public List<int> RATE_LIST = new List<int> ();
-	public int total = 100; // RATEの合計
+	public List<float> RATE_LIST = new List<float> ();
+	public float total = 100; // RATEの合計
 
 	// 自前のRATE設定クラス
 	[System.Serializable]
@@ -53,7 +55,14 @@ public class BlockManager : MonoBehaviour {
 			}
 		}
 
+		// RATE_SETTINGS
+		RATE_LIST = new List<float> ();
+		dataCtrl = new DataCtrl ();
+		dataCtrl.InitData ();
 		total = getTotalValue ();
+
+		// SCORE
+		InitScoreLevel();
 	}
 
 	void setEdges() {
@@ -71,7 +80,19 @@ public class BlockManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		UpdateRates ();
+	}
+
+	float lastPeriod;
+	/// <summary>
+	/// 1秒ごとに確率更新
+	/// </summary>
+	void UpdateRates() {
+		if (lastPeriod != Mathf.Floor (_gameManager._timeManager.timePassed)) {
+			DebugLogger.Log ("UPDATE! lastPeriod:" + lastPeriod + " now:" + Mathf.Floor (_gameManager._timeManager.timePassed));
+			lastPeriod = Mathf.Floor (_gameManager._timeManager.timePassed);
+			total = getTotalValue ();
+		}
 	}
 
 	public void removeBlock(Block pBlock) {
@@ -114,8 +135,8 @@ public class BlockManager : MonoBehaviour {
 		}
 
 		// 確率でアイテムを出す
-		int n = Random.Range(0, total);
-		int rate_value = 0;
+		float n = Random.Range(0, total);
+		float rate_value = 0;
 		for (int i = 0; i < RATE_LIST.Count; i++) {
 			rate_value += RATE_LIST [i];
 			if (n <= rate_value) {
@@ -126,11 +147,14 @@ public class BlockManager : MonoBehaviour {
 		return itemType;
 	}
 
-	int getTotalValue() {
-		int value = 0;
-		for (int i = 0; i < RATE_LIST.Count; i++) {
-			value += RATE_LIST [i];
-		}
+	float getTotalValue() {
+		RATE_LIST = dataCtrl.getRateList (_gameManager._timeManager.timePassed);
+
+		float value = 100f;
+
+//		for (int i = 0; i < RATE_LIST.Count; i++) {
+//			value += RATE_LIST [i];
+//		}
 		return value;
 	}
 		
@@ -173,6 +197,25 @@ public class BlockManager : MonoBehaviour {
 		}
 		return false;
 	
+	}
+	#endregion
+
+	#region SCORE_TIME
+	int scoreLevelNow = 0;
+	int scoreLevelNext = 0;
+	void InitScoreLevel() {
+		ScoreLevelUpdate (0);
+	}
+
+	public void ScoreLevelUpdate(int pScore) {
+		if (pScore == 0 ||
+			pScore >= scoreLevelNext) {
+			float addTimeNew = dataCtrl.getAddTime (pScore);
+			_gameManager.setAddTimePerBlock (addTimeNew);
+
+			scoreLevelNow = scoreLevelNext;
+			scoreLevelNext = dataCtrl.getNextTargetScore (pScore);
+		}
 	}
 	#endregion
 

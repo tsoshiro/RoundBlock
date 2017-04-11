@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 public class RateMethodTest {
 
@@ -21,16 +22,21 @@ public class RateMethodTest {
 
 	[Test]
 	public void BlockRateTest() {
-//		BlockManager _blockManager = new GameObject ("BlockManager", typeof(BlockManager)).GetComponent<BlockManager> ();
-//
-//		// サンプル入力
-//		_blockManager.RATE_LIST.Add (10);
-//		_blockManager.RATE_LIST.Add (20);
-//		_blockManager.RATE_LIST.Add (30);
-//		_blockManager.RATE_LIST.Add (40);
-//		_blockManager.RATE_LIST.Add (50);
-//		_blockManager.RATE_LIST.Add (60);
+		DataCtrl dataCtrl = new DataCtrl ();
 
+		dataCtrl.InitItemMasterData ();
 
+		float timeNow = 11.4f;
+		List<float> fl = dataCtrl.getRateList (timeNow);
+
+		Assert.AreEqual (1, fl [0]);
+		Assert.AreEqual (3, fl [1]);
+		Assert.AreEqual (1, fl [2]);
+		Assert.AreEqual (1, fl [3]);
+		Assert.AreEqual (1, fl [4]);
+		Assert.AreEqual (0, fl [5]);
+		Assert.AreEqual (1, fl [6]);
+		Assert.AreEqual (8, fl [7]);
+//		11,1,3,1,1,1,0,1,8
 	}
 }

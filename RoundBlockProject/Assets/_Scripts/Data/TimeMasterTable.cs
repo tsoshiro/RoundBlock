@@ -9,6 +9,6 @@ public class TimeMasterTable : MasterTableBase<TimeMaster> {
 }
 
 public class TimeMaster : MasterBase {
-	public float SCORE_IS_LOWER_THAN { get; private set; }
+	public int SCORE_IS_LOWER_THAN { get; private set; }
 	public float ADD_TIME { get; private set; }
 }

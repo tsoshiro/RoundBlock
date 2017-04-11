@@ -61,6 +61,7 @@
      <Compile Include="Assets\_Scripts\Data\MasterTableBase.cs" />
      <Compile Include="Assets\_Scripts\Data\TimeMasterTable.cs" />
      <Compile Include="Assets\_Scripts\Data\UserMasterTable.cs" />
+     <Compile Include="Assets\_Scripts\DataCtrl.cs" />
      <Compile Include="Assets\_Scripts\DebugManager.cs" />
      <Compile Include="Assets\_Scripts\Extension\SnakeToUpperCamel.cs" />
      <Compile Include="Assets\_Scripts\FeverCtrl.cs" />

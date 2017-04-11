@@ -124,6 +124,8 @@ public class GameManager : MonoBehaviour
 	public void removeBlock() {
 		// スコア追加
 		_scoreManager.addScore(SCORE_PER_BLOCK);
+		// ADD_TIME_UPDATE
+		_blockManager.ScoreLevelUpdate(_scoreManager.getScore());
 
 		// 時間追加
 		_timeManager.addTime(ADD_TIME_PER_BLOCK);
@@ -137,5 +139,9 @@ public class GameManager : MonoBehaviour
 
 	public void addTimeBlock() {
 		_timeManager.addTime (ADD_TIME_PER_TIME_BLOCK);
+	}
+
+	public void setAddTimePerBlock(float pAddTimeValue) {
+		ADD_TIME_PER_BLOCK = pAddTimeValue;
 	}
 }

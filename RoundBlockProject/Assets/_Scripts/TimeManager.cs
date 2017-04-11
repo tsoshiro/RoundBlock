@@ -11,10 +11,13 @@ public class TimeManager : MonoBehaviour {
 	public bool isTimerOn = false;
 	public float timer;
 
+	public float timePassed = 0;
+
 	// Use this for initialization
 	void Start () {
 		// 初期化
 		timer = TIME;
+		timePassed = 0;
 		isTimerOn = false;
 	}
 	
@@ -29,8 +32,10 @@ public class TimeManager : MonoBehaviour {
 		}
 
 		timer -= Time.deltaTime;
+		timePassed += Time.deltaTime;
 		if (timer <= 0) {
 			timer = 0;
+			timePassed = 0;
 			stopTimer();
 		}
 

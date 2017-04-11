@@ -1,4 +1,4 @@
-time_passed_less_than,rate_add_block,rate_hard,rate_wide,rate_shot,rate_supershot,rate_fever,rate_time,total
+TIME_PASSED_LESS_THAN,RATE_ADD_BLOCK,RATE_HARD,RATE_WIDE,RATE_SHOT,RATE_SUPERSHOT,RATE_FEVER,RATE_TIME,TOTAL
 1,0,0,0,0,0,0,0,0
 2,0,0,0,0,0,0,0,0
 3,0,0,0,0,0,0,0,0
