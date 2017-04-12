@@ -69,6 +69,7 @@
      <Compile Include="Assets\_Scripts\GameManager.cs" />
      <Compile Include="Assets\_Scripts\InputManager.cs" />
      <Compile Include="Assets\_Scripts\Item.cs" />
+     <Compile Include="Assets\_Scripts\LanguageCtrl.cs" />
      <Compile Include="Assets\_Scripts\RacketCtrl.cs" />
      <Compile Include="Assets\_Scripts\RacketSizeCtrl.cs" />
      <Compile Include="Assets\_Scripts\ScoreManager.cs" />

@@ -39,4 +39,13 @@ public class RateMethodTest {
 		Assert.AreEqual (8, fl [7]);
 //		11,1,3,1,1,1,0,1,8
 	}
+
+	[Test]
+	public void LanguageLoadTest() {
+		LanguageCtrl lc = new GameObject().AddComponent<LanguageCtrl>();
+		lc.initLocalization ();
+
+		string testMsg = lc.getMessageFromCode ("answer_01_y");
+		Assert.AreEqual ("はい！", testMsg);
+	}
 }
