@@ -25,7 +25,9 @@ public class BlockGroup {
 	/// </summary>
 	void init() {
 		
+		blocks = new List<Block> ();
 		instantiateBlocks ();
+
 	}
 
 	/// <summary>
@@ -33,6 +35,23 @@ public class BlockGroup {
 	/// </summary>
 	/// <returns>The blocks.</returns>
 	void instantiateBlocks() {
+		// BlockプールからBlockを取得
+		Block aBlock = new Block();
+
+		// アイテムブロック設定
+		aBlock.setItemType(Const.ItemType.NONE);
+		aBlock.setBlockColor();
+
+		// Blockの配置
+		Vector3 pos = Vector3.zero;
+		aBlock.transform.position = pos;
+
+		// 追加
+		blocks.Add(aBlock);
+	}
+
+	Block getBlock() {
+		return new Block ();
 	}
 
 	/// <summary>
