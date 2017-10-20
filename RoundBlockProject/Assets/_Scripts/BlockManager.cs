@@ -65,6 +65,9 @@ public class BlockManager : MonoBehaviour {
 		InitScoreLevel();
 	}
 
+	/// <summary>
+	/// ラケットを取得し、位置を設定する
+	/// </summary>
 	void setEdges() {
 		_racketCtrl = GameObject.Find("Rackets").GetComponent<RacketCtrl>();
 		edgeBottom 	= _racketCtrl._rackets[(int)RacketCtrl.RacketPosition.BOTTOM].transform.position.z + MARGINE;
@@ -73,6 +76,9 @@ public class BlockManager : MonoBehaviour {
 		edgeRight 	= _racketCtrl._rackets[(int)RacketCtrl.RacketPosition.RIGHT].transform.position.x - MARGINE;
 	}
 
+	/// <summary>
+	/// 破壊アニメーションの設定
+	/// </summary>
 	void setAnimation() {
 		_blockDestroyAnimationManager = this.GetComponent<BlockDestroyAnimationManager>();
 		_blockDestroyAnimationManager.init();
@@ -95,8 +101,12 @@ public class BlockManager : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// ブロックの撤去処理
+	/// </summary>
+	/// <param name="pBlock">P block.</param>
 	public void removeBlock(Block pBlock) {
-		// FX
+		// 利用可能な演出オブジェクトを取得
 		GameObject fxObj = _blockDestroyAnimationManager.getFxObj();
 		int counter = _blockDestroyAnimationManager.getCounter();
 
@@ -105,17 +115,11 @@ public class BlockManager : MonoBehaviour {
 		_gameManager.removeBlock();
 
 
-		// RESPAWN
+		// リスポーン
 		Vector3 v = new Vector3((float)Random.Range((int)edgeLeft, (int)edgeRight), 0, (float)Random.Range((int)edgeBottom, (int)edgeTop));
 		pBlock.transform.position = v;
 
 		setItemType(pBlock);
-		
-		//blockCount--;
-		//if (blockCount == 0) {
-		//	reset();
-		//	blockCount = _blockList.Count;
-		//}
 	}
 
 	/// <summary>
