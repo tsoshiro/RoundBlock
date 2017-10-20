@@ -352,7 +352,8 @@ public class Ball : MonoBehaviour {
 	}
 		
 	/// <summary>
-	/// HARD時、ボールがラケットに近い時はTriggerをOFFにする
+	/// HARD時、ボールがラケットに近い時はTriggerをOFFにする。
+	/// それによって打ち返しができるようになる。
 	/// </summary>
 	void setTriggerWhenHard() {
 		if (_gameManager._blockManager.checkIsNearRacket(this)) {
